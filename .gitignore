@@ -1,0 +1,11 @@
+# package files #
+*.jar
+*.war
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+#.idea
+.idea
+hs_err_pid*
