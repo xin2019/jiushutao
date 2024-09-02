@@ -1,0 +1,37 @@
+/*放大镜*/
+
+#mark{
+    width: 185px;
+    height: 185px;
+    position: absolute;
+    top:17px;
+    left:17px;
+    opacity: 0.5;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    cursor: move;
+    display: none;
+    background-color: lightblue;
+}
+
+#boxRight{
+    border-radius: 2%;
+    z-index: 10;
+    position: absolute;
+    top:20px;
+    left:565px;
+    width: 450px;
+    height: 550px;
+    border: 1px solid deepskyblue;
+    overflow: hidden;
+    display: none;
+
+}
+#boxRight img{
+
+    position: absolute;
+    top:0;
+    left:0;
+    width:243%;
+    height: 297%;
+}

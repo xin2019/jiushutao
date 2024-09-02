@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book.getT_book_name()}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" href="/css/bootstrap.css">
+    <link rel="stylesheet" th:href="@{/css/tao.css}" href="/css/tao.css">
+    <link rel="stylesheet" th:href="@{/dist/css/city-picker.css}" href="/dist/css/city-picker.css">
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.js}" src="/js/bootstrap.js"></script>
+    <script th:inline="javascript" th:src="@{/js/login/loginMain.js}" src="/js/login/loginMain.js"></script>
+
+    <!-- 字体图标 -->
+    <link rel="stylesheet" href="/bootstrap3/font-awesome-4.7.0/css/font-awesome.css" th:href="@{/bootstrap3/font-awesome-4.7.0/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/layout.css" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/top.css" th:href="@{/css/top.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/footer.css" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/product.css" th:href="@{/css/product.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/imgmove.css" th:href="@{/css/imgmove.css}"/>
+    <link href="/sweetalert/sweetalert2.min.css" rel="stylesheet" th:href="@{/sweetalert/sweetalert2.min.css}"/>
+    <script src="/sweetalert/sweetalert2.min.js" type="text/javascript" th:src="@{/sweetalert/sweetalert2.min.js}"></script>
+
+    <!--<link th:href="@{/sweetalert/sweetalert2.min.css}" rel="stylesheet" />-->
+    <!--<script th:src="@{/sweetalert/sweetalert2.min.js}" type="text/javascript"></script>-->
+
+    <!--放大镜-->
+    <link rel="stylesheet" th:href="@{/css/detail/bookdetail.css}">
+
+
+</head>
+<body class="container" onload="beforeOnload()">
+
+<input type="hidden" id="url_prefix" th:value="${book.getT_book_photo()}">
+<div th:insert="~{common/header::top-nav}"></div>
+<div class="container">
+    <div th:insert="~{common/header::tao-nav}"></div>
+
+<!--搜索框-->
+    <div th:insert="~{common/search::searchDiv}"></div>
+
+
+    <div id="formalContent">
+
+    <div id="product-detail" >
+        <div class="col-md-7 " style="width:50%;height: 503px">
+        <div id="box">
+            <img id="showPhoto" class="test" th:src="@{${book.getT_book_photo()}+'/1.jpg'}" style="width: 100%;height: 400px; border-radius: 5%;margin-top:20px">
+            <div id="mark"></div>
+        </div>
+            <div id="boxRight">
+                <img id="maxImg" th:src="@{${book.getT_book_photo()+'/1.jpg'}}">
+            </div>
+
+            <div class="row ">
+                <div class="col-md-2 "  th:each="index:${#numbers.sequence(1,book.getT_book_photo_nums())}" >
+                    <img th:id="${index}" th:src="@{${book.getT_book_photo()}+'/'+${index}+'.jpg'}" th:onmouseover="|showImg(${index})|" th:onmouseout="|removeClass(${index})|"  class="img-responsive detail-img" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <h3 style="margin-left: 200px;" class="col-md-12 title-row-2" :title="title" th:text="${book.getT_book_name()}"></h3>
+         <h4><p  th:text="'备注：'+${book.getT_book_desc()}"></p></h4>
+
+            <div class="col-md-12 price-bar">
+                <p><small> 价格 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small><span style="text-decoration-line: line-through;font-size: 25px;" th:text="'￥'+${book.getT_book_origin_price()}"></span></p>
+                <p><small>促销价&nbsp;&nbsp;&nbsp; </small> <span style="color: red;font-weight: bolder;font-size: 50px" th:text="'￥'+${book.getT_book_now_price()}"></span></p>
+                <div><small>*退货补运费 *7天无理由退货 *24小时快速退款 </small></div>
+            </div>
+            <form class="form-inline product-form col-md-12" role="form">
+                <!--<div class="col-md-12 form-space">-->
+                    <!--<label for="num">数量：</label>-->
+                    <!--<input id="numDown" type="button" value="-" class="num-btn">-->
+                    <!--<input id="num" type="text" size="2" readonly="readonly" class="num-text" value="1">-->
+                    <!--<input id="numUp" class="num-btn" type="button" value="+">-->
+                <!--</div>-->
+                <div class="col-md-12 form-space">
+                    <p> <small>出版社&nbsp;&nbsp;</small><small th:text="${book.getT_book_press()}"></small><br>
+                        <!--<small th:text="'是否为二手书：'+${book.isT_book_is_secondhand()==true?'二手书':'新书'}"></small>-->
+                        <a th:href="@{'/buyer/product/shopDetail?shopid='+${shopId}}">浏览该商店书籍</a>
+                    </p>
+                </div>
+                <div class="col-md-12 form-space">
+                    <input id="purChase" class="btn btn-primary btn-lg btn-block" type="button" value="立即购买">
+                </div>
+                <div class="col-md-12 form-space">
+                    <button id="addCart" type="button" class="btn btn-default go-cart"><span class="fa fa-cart-plus"></span> 加入购物车</button>
+                    <!--<button id="addFavorite" type="button" class="btn btn-default"><span id="fav" class="fa fa-heart-o"></span> 加入收藏</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+<div class="clearfix">
+<div th:insert="~{common/detail_footer::after_sales}"></div>
+</div>
+</div>
+</div>
+<div th:insert="~{common/footer::foot}"></div>
+
+
+<!--放大镜-->
+<script th:src="@{/js/detail/detail.js}"></script>
+
+
+</body>
+</html>

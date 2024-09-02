@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.RegisterDao">
+
+    <!--插入新的记录到tbuyer&#45;&#45;》注册-->
+    <insert id="save" parameterType="T_Buyer">
+        insert into t_buyer(t_buyer_id, t_buyer_name, t_buyer_phone, t_buyer_password, t_buyer_address, t_order_id, t_cart_id,t_buyer_email,t_buyer_sex)
+        VALUES (#{t_buyer_id},#{t_buyer_name},#{t_buyer_phone},#{t_buyer_password},#{t_buyer_address},#{t_order_id},#{t_cart_id},#{t_buyer_email},#{t_buyer_sex})
+    </insert>
+</mapper>

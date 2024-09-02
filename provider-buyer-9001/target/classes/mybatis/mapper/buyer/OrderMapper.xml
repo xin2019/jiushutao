@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.OrderDao">
+
+
+    <!--//通过bookid修改状态-->
+
+    <update id="updateStatusByBookid">
+        update  t_book set  t_book_status=3 where t_book_id=4
+    </update>
+    <!--//通过orderid获得bookid-->
+    <select id="getBookidByOrderid" parameterType="String" resultType="String">
+        select t_book_id from t_order where t_order_id=#{orderid};
+    </select>
+
+    <!--/*-->
+    <!--通过订单id改变收货状态-->
+    <!--*/-->
+    <update id="updateStatusByOrderid" >
+        update t_order set t_book_status=#{status} where t_order_id=#{orderid}
+    </update>
+
+
+
+    
+    <select id="allOrder" resultType="T_Order" parameterType="String">
+        select * from t_order where t_buyer_id=#{id}
+    </select>
+
+   <select id="queryShopNameByShopId" parameterType="String" resultType="String">
+       select t_shop_name from t_shop where t_shop_id=#{id}
+   </select>
+
+    <select id="getAllShopIdByBuyerId" resultType="String" parameterType="String">
+        select t_shop_id from t_order where t_buyer_id=#{id}
+    </select>
+
+    <select id="findByBookId" resultType="T_Book">
+        select * from t_book where t_book_id=#{id}
+    </select>
+    <delete id="deleteOrderByOrderId" parameterType="String">
+        delete from t_order where t_order_id=#{id}
+    </delete>
+    <select id="getTBuyerById" parameterType="String" resultType="t_buyer">
+        select * from t_buyer where t_buyer_id in
+        (select t_buyer_id from t_order where t_order_id=#{id} )
+    </select>
+
+    <!--/*-->
+    <!--通过buyerid和bookid往order表插入记录-->
+    <!--删除对应bookid在book表中-->
+    <!--*/-->
+    <insert id="insertNewOrder" parameterType="t_buyer" >
+
+insert into t_order(t_order_id,t_total_price,t_buyer_id,t_seller_id,t_shop_id,t_book_id,t_bookid_quantity,t_order_date,t_book_now_price)
+ values (#{t_order_id},#{t_total_price},#{t_buyer_id},#{t_seller_id},#{t_shop_id},#{t_book_id},#{t_bookid_quantity},#{t_order_date},#{t_book_now_price})
+    </insert>
+
+   <delete id="deleteBookByBookId" parameterType="String">
+       delete from t_book where t_book_id=#{t_book}
+   </delete>
+
+    <!--通过shopid获得sellerid-->
+    <select id="getSelleridByShopId" parameterType="String" resultType="String">
+        select t_seller_id from t_shop where t_shop_id=#{shopid};
+    </select>
+</mapper>

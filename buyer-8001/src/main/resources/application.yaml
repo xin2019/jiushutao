@@ -1,0 +1,34 @@
+server:
+  port: 80
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/,http://localhost:7002/eureka/,http://localhost:7003/eureka/
+#      defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/,http://eureka7003.com:7003/eureka/
+    fetch-registry: false
+
+github:
+  redirect:
+#    uri: http://192.xxx:8001/callback
+    uri: http://enin.asia:8001/callback
+  client:
+    id: 06d5fd1f549c50b2f9a3
+    secret: 2891781baf742bffbc21a0fe368bfd91b838a1af
+#    id: 783f0312405613ecd0a7
+#    secret: d788db9e764a606d7c6d37eb3eab9d148874c7ae
+#     id: 411789560e005d724dd8
+#     secret: 22eedb8d8339537eecfd741ace71c9fb5a9fc12e
+#     secret: d876879b937f218122055e2a433581af07f316c2
+#    id: 3b8cfeb06d8c26972e25
+#    secret: ab73f80c2757dadc619e0bda143ffe4d3a16bb7a
+#    124
+#    id: c18268ee9a68f992dca3
+#    secret: e343ad610154eec2439d5f4b13c43b2c8aaa912d
+spring:
+  resources:
+    static-locations: classpath:/static/
+  application:
+    name: 买家界面
+
+
+

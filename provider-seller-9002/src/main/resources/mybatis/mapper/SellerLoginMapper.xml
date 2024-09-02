@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.SellerLoginDao">
+
+    <!--新增卖家信息-->
+    <insert id="addNewSeller" parameterType="T_SELLER">
+
+        insert into t_seller(t_seller_id, t_seller_name, t_seller_phone, t_seller_password, t_shop_id)
+        values (#{t_seller_id},#{t_seller_name},#{t_seller_phone},#{t_seller_password},#{t_shop_id})
+    </insert>
+
+    <!--判断是否是合法卖家用户-->
+    <select id="isRightSeller" parameterType="String" resultType="T_SElLER">
+        select * from t_seller where t_seller_phone=#{phone} and t_seller_password=#{password}
+    </select>
+
+
+    <!--/*-->
+    <!--根据卖家手机号返回卖家-->
+    <!--*/-->
+    <select id="getSeller" parameterType="String" resultType="T_SELLER">
+        select * from t_seller where t_seller_phone=#{phone}
+    </select>
+
+
+    <!--/*-->
+    <!--根据shopid获得shop实体-->
+    <!--*/-->
+    <select id="getShop" resultType="T_SHOP" parameterType="String">
+        select * from t_shop where t_shop_id=#{shopid}
+    </select>
+
+
+    <!--/*-->
+    <!--根据shopid获得所有书籍-->
+    <!--*/-->
+    <select id="getAllBooksByShopId" parameterType="String" resultType="T_BOOK">
+        select * from t_book where t_shop_id=#{shopid} and t_book_status=0
+    </select>
+    <!--/*-->
+    <!--通过bookid在order表中寻找，返回order对象-->
+    <!--*/-->
+    <select id="getOrderByBookid" resultType="T_Order" parameterType="String">
+        select * from t_order where t_book_id=#{bookid} limit 0,1;
+    </select>
+
+    <!--/*-->
+    <!--通过bookid和status修改bookid的stauts，确认收货-->
+    <!--*/-->
+
+    <update id="updateStatusByBookidAndStatus" >
+        update t_book set t_book_status=#{status} where t_book_id=#{bookid}
+    </update>
+    <!--/*-->
+    <!--查看已被购买书籍-->
+    <!--*/-->
+
+    <select id="getAllBooksPurchase" resultType="T_BOOK">
+        select * from t_book where t_shop_id=#{sellerid} and t_book_status=#{status}
+     </select>
+
+    <!--/*-->
+    <!--通过shopid修改商店名称-->
+    <!--*/-->
+    <update id="updateShopnameByShopid" >
+        update t_shop set t_shop_name=#{shopname}  where t_shop_id=#{shopid};
+    </update>
+
+
+    <!--/*-->
+    <!--通过bookid下架book-->
+    <!--*/-->
+    <delete id="rackBookByBookid" parameterType="String">
+        delete from t_book where t_book_id=#{bookid}
+    </delete>
+
+
+    <!--/*-->
+    <!--新增书籍,在book表和shop表-->
+    <!--*/-->
+
+    <insert id="addNewBook" parameterType="t_book">
+        insert into
+        t_book(t_book_id, t_book_origin_price, t_book_now_price, t_book_is_secondhand, t_book_press, t_shop_id, t_book_category, t_book_photo, t_book_priority, t_book_name, t_book_photo_nums, t_book_desc,t_book_status)
+         VALUES (#{t_book_id},#{t_book_origin_price},#{t_book_now_price},#{t_book_is_secondhand},#{t_book_press},#{t_shop_id},#{t_book_category},#{t_book_photo},#{t_book_priority},#{t_book_name},#{t_book_photo_nums},#{t_book_desc},0)
+    </insert>
+
+
+    <!--/*-->
+    <!--新增默认商店，用于注册新的卖家时候使用-->
+    <!--*/-->
+    <insert id="addNewShop" parameterType="t_shop">
+
+    insert into
+    t_shop(t_shop_id, t_shop_name, t_seller_id, t_book_id, t_shop_photo, t_shop_priority)
+     VALUES (#{t_shop_id}, #{t_shop_name}, #{t_seller_id}, #{t_book_id}, #{t_shop_photo}, #{t_shop_priority})
+        </insert>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.LoginDao">
+
+    <select id="queryByBuyerName" resultType="t_buyer" parameterType="String">
+        select * from t_buyer where t_buyer_name=#{name}
+    </select>
+
+    <select id="queryByBuyerPhone" resultType="t_buyer" parameterType="String">
+        select * from t_buyer where t_buyer_phone=#{phone}
+    </select>
+
+    <select id="isExistBuyer" resultType="t_buyer" parameterType="Map">
+        select * from t_buyer where t_buyer_phone=#{phone} and t_buyer_password=#{password}
+    </select>
+
+    <select id="queryAll" resultType="t_buyer">
+        select * from t_buyer;
+    </select>
+
+
+    <select id="queryIdByPhone" resultType="T_Buyer" parameterType="String">
+        select * from t_buyer where t_buyer_phone=#{phone}
+    </select>
+
+    <select id="isRegister" resultType="T_Buyer" parameterType="String">
+        select * from t_buyer where t_buyer_phone=#{phone}
+    </select>
+</mapper>

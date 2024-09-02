@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.CartDao">
+
+    <!--该resultmap失效了-->
+    <resultMap id="cartandbookMap" type="com.xin.jiushutao.proxy.buyer.CartAndBook">
+        <id property="t_card_id" column="t_cart_id"></id>
+        <result property="t_book_id" column="t_book_id"></result>
+        <result property="t_book_id_quantity" column="t_book_id_quantity"></result>
+        <result property="t_buyer_id" column="t_buyer_id"></result>
+        <collection property="books" ofType="T_Book">
+            <id column="t_book_id" property="t_book_id"></id>
+            <result column="t_book_name" property="t_book_name"></result>
+            <result column="t_book_origin_price" property="t_book_origin_price"></result>
+            <result column="t_book_now_price" property="t_book_now_price"></result>
+            <result column="t_book_is_secondhand" property="t_book_is_secondhand"></result>
+            <result column="t_book_press" property="t_book_press"></result>
+            <result column="t_shop_id" property="t_shop_id"></result>
+            <result column="t_book_category" property="t_book_category"></result>
+            <result column="t_book_photo" property="t_book_photo"></result>
+            <result column="t_book_priority" property="t_book_priority"></result>
+            <result column="t_book_photo_nums" property="t_book_photo_nums"></result>
+        </collection>
+    </resultMap>
+    
+    <select id="getBooksByBuyerID" resultMap="cartandbookMap" parameterType="String">
+        select * from t_cart where t_buyer_id=#{t_buyer_id}
+    </select>
+
+
+    <!--/*-->
+    <!--添加商品到购物车-->
+    <!--*/-->
+
+    <insert id="addToCart" >
+        insert into t_cart(t_cart_id,t_book_id,t_book_id_quantity,t_buyer_id)
+        values(#{buyerid},#{bookid},#{quantity},#{buyerid})
+    </insert>
+
+    <!--/*-->
+    <!--通过buyerid返回该买家的所有已加入购物车的商品,-->
+    <!--待改善，可通过直接在数据库用collection查询-->
+    <!--*/-->
+
+    <select id="getAllBookIdByBuyerid" parameterType="String" resultType="T_Cart">
+        select * from t_cart where t_buyer_id=#{buyerid}
+    </select>
+
+
+    <!--/*-->
+    <!--通过bookid删除对应cart记录-->
+    <!--*/-->
+    <delete id="deleteCartRecordByBookId" parameterType="String" >
+        delete from t_cart where t_book_id=#{bookid}
+    </delete>
+
+</mapper>

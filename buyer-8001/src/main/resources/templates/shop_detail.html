@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${currentShop.getT_shop_name()}"></title>
+    <link rel="stylesheet" th:href="@{/css/tao.css}" href="/css/tao.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" href="/css/bootstrap.css">
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.js}" src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/bootstrap3/font-awesome-4.7.0/css/font-awesome.css" th:href="@{/bootstrap3/font-awesome-4.7.0/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/layout.css" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/top.css" th:href="@{/css/top.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/footer.css" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/product.css" th:href="@{/css/product.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/imgmove.css" th:href="@{/css/imgmove.css}"/>
+    <link href="/sweetalert/sweetalert2.min.css" rel="stylesheet" th:href="@{/sweetalert/sweetalert2.min.css}"/>
+    <script src="/sweetalert/sweetalert2.min.js" type="text/javascript" th:src="@{/sweetalert/sweetalert2.min.js}"></script>
+
+</head>
+<body class="container" >
+<div th:insert="~{common/header::top-nav}"></div>
+<div th:insert="~{common/header::tao-nav}"></div>
+
+<!--搜索框-->
+<div th:insert="~{common/search::searchDiv}"></div>
+
+
+<div id="formalContent">
+    <div class="panel panel-info">
+        <div class="panel panel-heading text-center">
+            <h1 th:text="${currentShop.getT_shop_name()+'欢迎您的到来'}"></h1>
+        </div>
+        <div class="panel panel-body" id="PresentBook">
+            <div class="row" >
+                <div class="col-md-4" th:each="book:${allCurrentBooks}">
+                <a th:href="@{'/buyer/product/detail?id='+${book.getT_book_id()}}">
+                <!--<img class="img-rounded img-responsive"  th:src="@{'/upload/first_priority/'+${book.getT_book_id()}+'.jpg'}" style="width: 358px;height: 248px;">-->
+                <img class="img-rounded img-responsive"  th:src="@{${book.getT_book_photo()}+'/1.jpg'}" style="width: 358px;height: 248px;">
+                <br>
+                <span class="text-center" th:text="${book.getT_book_name()}" style="font-weight: bolder"></span>
+                </a>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="~{common/footer::foot}"></div>
+<script th:src="@{/js/detail/detail.js}"></script>
+<script>
+    var userID=null;
+    var bookID=null;
+    var userPhone=null;
+    var cookie=document.cookie;
+    var cookieArray=cookie.split(";");
+    for(var i=0;i<cookieArray.length;i++){
+        if(cookieArray[i].search("userID")!=-1){
+            userID=cookieArray[i].split("=")[1];
+        }
+        else if(cookieArray[i].search("bookID")!=-1){
+            bookID=cookieArray[i].split("=")[1];
+        }else if(cookieArray[i].search("userPhone")!=-1){
+            userPhone=cookieArray[i].split("=")[1];
+        }
+    }
+    if(userPhone!=null&&userPhone!=""&&userPhone!=undefined){
+
+        $("#githubPanel").addClass("hidden");
+
+        // alert("onload::userphone=>"+userPhone);
+
+        $("#loginSpan").removeAttr("href");
+        $("#loginSpan").removeAttr("data-toggle");
+        $("#myModal").modal('hide');
+
+        $("#loginSpan").html(userPhone + " 欢迎你!");
+
+        $("#loginSpan").addClass("dropdown-toggle");
+        $("#loginSpan").attr("data-toggle","dropdown");
+        $("#loginSpan").attr("data-target","#encompassLoginSpan")
+        $("#encompassLoginSpan").addClass("dropdown");
+    }
+</script>
+</body>
+</html>

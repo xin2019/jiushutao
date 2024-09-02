@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.AdminDao">
+    <!--/*-->
+    <!--通过shopid和priority修改shop优先级-->
+    <!--*/-->
+
+   <update id="updateShopPriorityByShopid" >
+        update t_shop set t_shop_priority=#{priority} ,t_priority_begin=now(),t_priority_end=date_add(now(),interval 3 day) where t_shop_id=#{shopid}
+   </update>
+
+    <!--/*-->
+    <!--返回所有在主栏位的书籍信息-->
+    <!--*/-->
+    <select id="allMainBoooks" resultType="T_Book">
+        select * from t_book where t_book_priority=2;
+    </select>
+
+    <!--/*-->
+    <!--返回所有在好书推荐栏位的信息-->
+    <!--*/-->
+    <select id="allRecomendBooks" resultType="T_Book">
+        select * from t_book where t_book_priority=1
+    </select>
+
+
+    <!--/*-->
+    <!--返回所有在金牌书屋栏位的商店信息-->
+    <!--*/-->
+    <select id="allGoldShops" resultType="T_Shop">
+        select * from t_shop where t_shop_priority=1;
+    </select>
+
+    <!--/*-->
+    <!--提升商铺-》在金牌书屋栏位展示-->
+    <!--*/-->
+    <update id="liftShop" parameterType="String">
+        update t_shop set t_shop_priority=1 ,t_priority_begin=now(),t_priority_end=date_add(now(),interval 3 day) where t_shop_id=#{shopid}
+    </update>
+
+
+    <!--/*-->
+    <!--提升商铺-&#45;&#45;》通过商铺id查询商铺持有人信息信息-->
+    <!--*/-->
+
+    <select id="getseller" parameterType="String" resultType="T_Seller">
+        select * from t_seller where t_shop_id=#{shopid}
+    </select>
+
+
+    <!--/*-->
+    <!--提升商铺-&#45;&#45;》通过商铺id查询商铺信息-->
+    <!--*/-->
+
+    <select id="getshopByShopid" resultType="T_Shop" parameterType="String">
+        select * from t_shop where t_shop_id=#{shopid};
+    </select>
+
+    <!--/*-->
+    <!--提升书籍优先级-->
+    <!--*/-->
+
+    <update id="updatePriorityBook">
+
+      UPDATE t_book set t_book_priority=#{priority},t_priority_begin=now(),t_priority_end=date_add(now(),interval 3 day) where t_book_id=#{bookid}
+
+    </update>
+
+
+    <!--/*-->
+    <!--通过adminphone返回admin对象-->
+    <!--*/-->
+    <select id="getadmin" parameterType="String" resultType="T_Admin">
+        select * from t_admin where t_admin_phone=#{phone};
+    </select>
+
+    <!--/*-->
+    <!--接收来自8002卖家发送的需要提升栏位的书籍id booid-->
+    <!--*/-->
+    <insert id="receiveBookid" parameterType="String">
+
+insert into t_priority(t_book_id) VALUES (#{bookid})
+    </insert>
+
+    <!--/*-->
+    <!--接收来自8002卖家发送的需要提升栏位的商铺id shopid-->
+    <!--*/-->
+    <insert id="receiveShopid" parameterType="String">
+
+insert into t_priority(t_shop_id) VALUES (#{shopid})
+    </insert>
+</mapper>

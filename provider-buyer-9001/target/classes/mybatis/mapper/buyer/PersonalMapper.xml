@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.PersonalDao">
+    <resultMap id="orderAndBuyer" type="com.xin.jiushutao.proxy.buyer.OrderAndBuyer">
+        <id property="t_order_id" column="t_order_id"></id>
+        <result property="t_total_price" column="t_total_price"></result>
+        <result property="t_buyer_id" column="t_buyer_id"></result>
+        <result property="t_seller_id" column="t_seller_id"></result>
+        <result property="t_shop_id" column="t_shop_id"></result>
+        <result property="t_book_id" column="t_book_id"></result>
+        <result property="t_bookid_quantity" column="t_bookid_quantity"></result>
+        <result property="t_order_date" column="t_order_date"></result>
+        <association property="t_buyer" javaType="T_Buyer">
+            <id property="t_buyer_id" column="t_buyer_id"></id>
+            <result property="t_buyer_name" column="t_buyer_name"></result>
+            <result property="t_buyer_phone" column="t_buyer_phone"></result>
+            <result property="t_buyer_password" column="t_buyer_password"></result>
+            <result property="t_buyer_address" column="t_buyer_address"></result>
+            <result property="t_cart_id" column="t_cart_id"></result>
+        </association>
+    </resultMap>
+
+    <!--/*-->
+    <!--渲染收货地址，获得该买家所有地址-->
+    <!--*/-->
+    <select id="getaddress" resultType="T_Address" parameterType="String">
+        select * from t_address where t_buyer_id=#{buyerid};
+    </select>
+
+
+    <!--/*-->
+    <!--通过addressid删除对应的address-->
+    <!--*/-->
+
+    <delete id="deleteAddressByAddressID" parameterType="String">
+        delete from t_address where t_address_id=#{addressid}
+    </delete>
+
+
+
+
+
+    <!--/*-->
+    <!--新增地址-->
+    <!--*/-->
+    <insert id="addnewaddress" parameterType="T_Address">
+    insert into t_address(t_buyer_id, t_buyer_address, t_address_id, t_address_default)
+     VALUES (#{t_buyer_id},#{t_buyer_address},#{t_address_id},#{t_address_default})
+    </insert>
+
+
+
+
+    <select id="getOrderAndBuyerByorderId" resultMap="orderAndBuyer" parameterType="String">
+        select * from t_order as a,t_buyer as b where a.t_order_id=#{id} and a.t_buyer_id=b.t_buyer_id
+    </select>
+
+    <select id="getBuyerByBuyerId" parameterType="String" resultType="T_Buyer">
+        select * from t_buyer where t_buyer_id=#{id};
+    </select>
+
+    <update id="updateT_Buyer" parameterType="t_buyer" >
+UPDATE t_buyer set t_buyer_sex=#{t_buyer_sex},t_buyer_email=#{t_buyer_email},t_buyer_name=#{t_buyer_name} where t_buyer_id=#{t_buyer_id}
+
+    </update>
+
+    <update id="save" parameterType="t_buyer">
+        update t_buyer set t_buyer_name=#{t_buyer_name},t_buyer_email=#{t_buyer_email},t_buyer_password=#{t_buyer_password},
+        t_buyer_address=#{t_buyer_address},t_buyer_sex=#{t_buyer_sex} where t_buyer_id=#{t_buyer_id}
+    </update>
+
+</mapper>

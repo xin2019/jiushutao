@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">-->
+    <title >旧书淘</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" href="/css/bootstrap.css">
+    <link rel="stylesheet" th:href="@{/css/tao.css}" href="/css/tao.css">
+    <link rel="stylesheet" th:href="@{/dist/css/city-picker.css}" href="/dist/css/city-picker.css">
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.js}" src="/js/bootstrap.js"></script>
+    <script th:src="@{/js/holder.min.js}" src="/js/holder.min.js"></script>
+    <script th:src="@{/dist/js/city-picker.data.js}" src="/dist/js/city-picker.data.js"></script>
+    <script th:src="@{/dist/js/city-picker.js}" src="/dist/js/city-picker.js"></script>
+
+<script>
+    function shouye() {
+        window.location.reload();
+    }
+
+
+    function searchVersion2(){
+        var searchName=$('#searchName').val();
+        $.ajax({
+            url: "/buyer/product/searchBooks?likename="+searchName,
+            type: "get",
+            jsontype: "json",
+            success: function (data) {
+                console.log(data)
+                var obj=JSON.parse(data)
+                var msg=obj.msg;
+                $('#formalContent').addClass('hidden');
+                $('#searchNull').addClass('hidden');
+                $('#searchContent').addClass('hidden');
+                if(msg!=null&&msg!=""){
+
+
+                    $('#searchNull').removeClass('hidden');
+                    $('#tip').html(msg)
+                }
+                else{
+                    var books= obj.likebooks;
+                    var content="";
+                    for(var index in books){
+                        var hrefurl="/buyer/product/detail?id="+books[index].t_book_id;
+                        console.log(hrefurl)
+                        content+=
+                            "<div class='col-md-4' style='text-align: center'>"+
+                            "<a href='"+hrefurl+"'"+
+                            ">"+
+                            "<img class='img-rounded img-responsive' style='width: 358px;height: 248px' src='"+
+                            books[index].t_book_photo+"/1.jpg'>"+
+                            "<span style='font-weight: bolder;text-align: center'>"+books[index].t_book_name+"</span>"+
+                            "</a>"+
+                            "</div>"
+                        ;
+                        $('#searchbody').html(content)
+                    }
+                    $('#searchContent').removeClass('hidden')
+                }
+            }
+        })
+    }
+</script>
+
+    <script th:inline="javascript" th:src="@{/js/login/loginViewController.js}" src="/js/login/loginViewController.js"></script>
+    <script th:inline="javascript" th:src="@{/js/login/loginMain.js}" src="/js/login/loginMain.js"></script>
+    <script th:inline="javascript" th:src="@{/js/login/loginFunction.js}" src="/js/login/loginFunction.js"></script>
+
+</head>
+<body class="container">
+<!--<script>-->
+    <!--var cookie=document.cookie;-->
+    <!--console.log(cookie);-->
+    <!--var cookieArray=cookie.split(";");-->
+    <!--var userPhone=cookieArray[0].split("=")[1];-->
+    <!--// alert(userPhone);-->
+    <!--console.log("cookie==>"+cookie);-->
+    <!--var userID=cookie.split("=")[2];-->
+    <!--console.log("userID:"+userID);-->
+    <!--if(userPhone!=null&&userPhone!=""&&userPhone!=undefined){-->
+
+        <!--// alert("onload::userphone=>"+userPhone);-->
+
+        <!--$("#loginSpan").removeAttr("href");-->
+        <!--$("#loginSpan").removeAttr("data-toggle");-->
+        <!--$("#myModal").modal('hide');-->
+
+        <!--$("#loginSpan").html(userPhone + " 欢迎你!");-->
+
+        <!--$("#loginSpan").addClass("dropdown-toggle");-->
+        <!--$("#loginSpan").attr("data-toggle","dropdown");-->
+        <!--$("#loginSpan").attr("data-target","#encompassLoginSpan")-->
+        <!--$("#encompassLoginSpan").addClass("dropdown");-->
+    <!--}-->
+<!--</script>-->
+<div th:insert="~{common/header::top-nav}"></div>
+<div th:insert="~{common/header::tao-nav}"></div>
+
+<div th:insert="~{common/search::searchDiv}"></div>
+
+
+
+<!--正常页面显示-->
+<div id="formalContent">
+
+<div class="container ">
+
+
+
+    <div class="row">
+        <ul id="topSpy1" idx="topSpy" class="nav nav-tabs spy">
+            <li role="presentation" class="active"><a href="#"><span
+                    class="glyphicon glyphicon-th-list"> 商品分类</span></a>
+            </li>
+            <li role="presentation"><a onclick="shouye()">首页</a></li>
+            <li role="presentation"><a onclick="categorySort('A')">A 马克思类</a></li>
+            <li role="presentation"><a onclick="categorySort('B')"> B 哲学/宗教</a></li>
+            <li role="presentation"><a onclick="categorySort('C')">C 社会科学总论</a></li>
+            <li role="presentation"><a onclick="categorySort('D')">D 政治/法律</a></li>
+            <li role="presentation"><a onclick="categorySort('E')">E 军事</a></li>
+            <li role="presentation"><a onclick="categorySort('F')">F 经济</a></li>
+            <li role="presentation"><a onclick="categorySort('G')">G 文化</a></li>
+            <li role="presentation"><a onclick="categorySort('H')">H 语言</a></li>
+            <li role="presentation"><a onclick="categorySort('I')">I 文学</a></li>
+            <li role="presentation"><a onclick="categorySort('J')">J 艺术</a></li>
+            <!--<li class="dropdown">-->
+                <!--<a class="dropdown-toggle" data-toggle="dropdown">-->
+                    <!--Messages-->
+                    <!--<span class="caret"></span>-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">-->
+                    <!--<li><a href="#">Action</a></li>-->
+                    <!--<li><a href="#">Another action</a></li>-->
+                    <!--<li><a href="#">Something else here</a></li>-->
+                    <!--<li role="separator" class="divider"></li>-->
+                    <!--<li><a href="#">Separated link</a></li>-->
+                <!--</ul>-->
+            <!--</li>-->
+        </ul>
+    </div>
+    <div id="carouselContext">
+    <div class="row" >
+
+        <div id="myCarousel" class="carousel slide">
+
+            <!-- 轮播（Carousel）项目 -->
+            <div class="carousel-inner" >
+                <div class="item active">
+                  <a id="mainHref1"> <!--<img th:src="@{holder.js/100px380}" src="holder.js/100px380" alt="First slide">-->
+                    <img id="mainImg1"  style="width:1170px;height: 380px" alt="First slide"></a>
+                </div>
+                <div class="item">
+                    <a id="mainHref2">
+                    <img  id="mainImg2"  style="width:1170px;height: 380px" alt="First slide">
+                    </a>
+                </div>
+                <div class="item">
+                    <a id="mainHref3">
+                    <img  id="mainImg3" style="width:1170px;height: 380px" alt="First slide">
+                    </a>
+                </div>
+            </div>
+            <!-- 轮播（Carousel）导航 -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span  class="sr-only"></span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span  class="sr-only"></span>
+            </a>
+        </div>
+        <div class="col-md-1 tao-sidebar">
+            <a id="topSpy" class="spyObject btn btn-default active" style="border-radius: 50%;" onclick="">顶部</a>
+            <a id="recommend" class="spyObject btn btn-default" style="border-radius: 50%;">推荐</a>
+            <a id="moreBooks" class="spyObject btn btn-default" style="border-radius: 50%;">书屋</a>
+            <a id="studyChamber" class="spyObject btn btn-default" style="border-radius: 50%;">更多</a>
+        </div>
+        <ul class="nav nav-tabs nav-justified">
+            <li><a href="javascript:" class="fisrt" id="mainText1"></a></li>
+            <li><a href="javascript:" class="second" id="mainText2"></a></li>
+            <li><a href="javascript:" class="third" id="mainText3">  </a></li>
+        </ul>
+
+    </div>
+    <div id="recommend1" idx="recommend" class="page-header spy">
+        <h1 class="text-info text-center"><span class="glyphicon glyphicon-bullhorn"
+                                                style="color: #2bd2 ;padding-top:15px;"></span>&nbsp;好&nbsp;书&nbsp;推&nbsp;荐
+        </h1>
+    </div>
+
+    <div class="row" id="recommendContent">
+        <!--<div class="col-md-4" th:each="book:${session.books}">-->
+            <!--<a th:href="@{'/buyer/product/detail?id='+${book.getT_book_id()}}">-->
+                <!--&lt;!&ndash;<img class="img-rounded img-responsive"  th:src="@{'/upload/first_priority/'+${book.getT_book_id()}+'.jpg'}" style="width: 358px;height: 248px;">&ndash;&gt;-->
+                <!--<img class="img-rounded img-responsive"  th:src="@{${book.getT_book_photo()}+'/1.jpg'}" style="width: 358px;height: 248px;">-->
+                <!--<br>-->
+                <!--<span class="text-center center-block" th:text="${book.getT_book_name()}" style="font-weight: bolder"></span>-->
+            <!--</a>-->
+        <!--</div>-->
+
+
+
+    </div>
+
+    <div id="moreBooks1" idx="moreBooks" class="page-header spy">
+        <h1 class="text-info text-center"><span class="glyphicon glyphicon-hand-right"
+                                                style="color: #2bd2 ;padding-top:15px;"></span>&nbsp;金&nbsp;牌&nbsp;书&nbsp;屋
+        </h1>
+    </div>
+    <div class="row" id="goldContent" style="margin-top:15px;">
+        <div class='col-md-6'>
+            <a>
+            <img class='img-rounded' src='' style='width:553px;height:243px;'>
+                <br>
+                <span></span>
+            </a>
+            <!--<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">-->
+        </div>
+    </div>
+    <!--<div class="row" style="margin-top:15px;">-->
+        <!--<div class="col-md-6">-->
+            <!--<img class="img-rounded" th:src="@{/upload/top_shops/1.jpg}" style="width:553px;height:243px;">-->
+            <!--&lt;!&ndash;<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-6">-->
+            <!--<img class="img-rounded" th:src="@{/upload/top_shops/4.jpg}" style="width:553px;height:243px;">-->
+            <!--&lt;!&ndash;<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+    <div id="studyChamber1" idx="studyChamber" class="page-header spy">
+        <h1 class="text-info text-center"><span class="glyphicon glyphicon-hand-right"
+                                                style="color: #2bd2 ;padding-top:15px;"></span>&nbsp;更&nbsp;多&nbsp;好&nbsp;书
+        </h1>
+    </div>
+    <div class="row" style="margin-top:15px;" id="showMoreBooksGoodContent">
+        <div class='col-md-3'>
+            <!--<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">-->
+            <img class="img-rounded" th:src="@{/upload/top_book/7.jpg}" style='width:261px;height:248px;'>
+        </div>
+        <!--<div class="col-md-3">-->
+            <!--<img class="img-rounded" th:src="@{/upload/top_book/8.jpg}" style="width:261px;height:248px;">-->
+            <!--&lt;!&ndash;<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-3">-->
+            <!--<img class="img-rounded" th:src="@{/upload/top_book/6.jpg}" style="width:261px;height:248px;">-->
+            <!--&lt;!&ndash;<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-3">-->
+            <!--<img class="img-rounded" th:src="@{/upload/top_book/5.jpg}" style="width:261px;height:248px;">-->
+            <!--&lt;!&ndash;<img class="img-rounded" th:src="@{holder.js/100px250}" src="holder.js/100px250">&ndash;&gt;-->
+        <!--</div>-->
+    </div>
+
+
+    </div>
+    <div class="co-md-1" style="top: 47%;right: 0;position: fixed;">
+        <button id="siderCart" class="btn btn-default" style="height: 100px;">
+        <span class="glyphicon glyphicon-shopping-cart"
+              style="color:#5bc0de;font-size: xx-large;margin-top: 15px;"></span><br>
+            <p style="color: #5bc0de;margin-top: 10px;">购物车</p>
+        </button>
+    </div>
+<!--</div>-->
+
+</div>
+</div>
+<!--书籍分类页面-->
+<div id="categoryContent" class="hidden clearfix">
+
+</div>
+<div class="clearfix" th:insert="~{common/footer::foot}"></div>
+
+</body>
+</html>

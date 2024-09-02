@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单确认</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" href="/css/bootstrap.css">
+    <link rel="stylesheet" th:href="@{/css/tao.css}" href="/css/tao.css">
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.js}" src="/js/bootstrap.js"></script>
+
+    <!-- 字体图标 -->
+    <link rel="stylesheet" href="/bootstrap3/font-awesome-4.7.0/css/font-awesome.css" th:href="@{/bootstrap3/font-awesome-4.7.0/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/layout.css" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/top.css" th:href="@{/css/top.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/orderConfirm.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cart.css}" />
+    <link rel="stylesheet" type="text/css" href="/css/footer.css" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/product.css" th:href="@{/css/product.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/imgmove.css" th:href="@{/css/imgmove.css}"/>
+    <link href="/sweetalert/sweetalert2.min.css" rel="stylesheet" th:href="@{/sweetalert/sweetalert2.min.css}"/>
+    <script src="/sweetalert/sweetalert2.min.js" type="text/javascript" th:src="@{/sweetalert/sweetalert2.min.js}"></script>
+
+</head>
+<body class="container" >
+<input th:text="${phone}" class="hidden" id="phone">
+<input th:text="${bookid}" class="hidden" id="bookid">
+<input th:text="${quantity}" class="hidden" id="quantity">
+<div th:insert="~{common/header::top-nav}"></div>
+<div th:insert="~{common/header::tao-nav}"></div>
+
+<div class="col-md-offset-1 col-md-10">
+    <div class="col-md-4">
+        <div class="col-md-12 order-bar-undo">
+            1.确认订单信息
+            <span class="pull-right"><span class="fa fa-chevron-right"></span></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="col-md-12  order-bar-active">
+            2.在线支付
+            <span class="pull-right"><span class="fa fa-chevron-right"></span></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="col-md-12 order-bar-undo">
+            3.付款成功
+        </div>
+    </div>
+</div>
+    <div >
+        <!--<img th:src="@{/images/pay/wepay.png}" class="center-block"  style="margin-top: 30px;align-content:center;width: 400px;height: 390px;">-->
+    </div>
+<div class="pay-bar">
+    <span class="pull-right"><input id="btn-pay-success" type="button" value="支付完成" class="btn btn-primary btn-lg link-pay"/></span>
+    <span class="pull-right"><input id="btn-cancel" type="button" value="取消订单" class="btn btn-default btn-lg link-pay"/></span>
+</div>
+
+<div class="clearfix" th:insert="~{common/footer::foot}"></div>
+<script>
+
+
+
+
+    //支付完成
+    $('#btn-pay-success').click(function () {
+        var url=window.location.href;
+        var objs=url.split("/");
+        var phone=objs[4].split("=")[1];
+        var bookid=objs[5].split("=")[1];
+        var quantity=objs[6].split("=")[1];
+
+        $.ajax({
+            url:"/insertNewOrder",
+            data:{
+                "phone":phone,
+                "bookid":bookid,
+                "quantity":quantity
+            },
+            type:"post",
+            success:function (data) {
+                alert(data)
+                if(data==true){
+                    window.location.href="/orderSuccess";//////////////////////////进入付款
+                }else{
+                    alert("添加order记录失败")
+                }
+            },
+            error:function (data) {
+                alert("ajax  -btnpay.click失败")
+            }
+        })
+        // window.location.href="/orderSuccess"
+    })
+
+
+    // 取消付款
+    $('#btn-cancel').click(function () {
+        var url=window.location.href;
+        var objs=url.split("/");
+        var phone=objs[4].split("=")[1];
+        var bookid=objs[5].split("=")[1];
+        var quantity=objs[6].split("=")[1];
+        var url="/buyer/product/detail?id="+bookid;
+        console.log(url)
+        window.location.href=url;
+    })
+</script>
+<script th:inline="javascript" th:src="@{/js/login/loginMain.js}" src="/js/login/loginMain.js"></script>
+<script>
+    var cookie=document.cookie;
+    console.log(cookie);
+    var cookieArray=cookie.split(";");
+    var userPhone=cookieArray[0].split("=")[1];
+    alert("userPhone=="+userPhone);
+    if(userPhone!=null&&userPhone!=""&&userPhone!=undefined) {
+        alert("entery===>userphone!=null")
+        $("#loginSpan").removeAttr("href");
+        $("#loginSpan").removeAttr("data-toggle");
+        $("#myModal").modal('hide');
+
+        $("#loginSpan").html(userPhone + " 欢迎你!");
+
+        $("#loginSpan").addClass("dropdown-toggle");
+        $("#loginSpan").attr("data-toggle","dropdown");
+        $("#loginSpan").attr("data-target","#encompassLoginSpan")
+        $("#encompassLoginSpan").addClass("dropdown");
+    }else{alert("kkk");
+        window.location.href="http://localhost:80/";
+    }
+</script>
+</body>
+</html>

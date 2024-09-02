@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>卖家后台系统</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--shopid-->
+<p th:text="${seller.getT_shop().getT_shop_id()}" id="shopidText" class="hidden"></p>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a class="icon-bar" href="#">卖家后台系统</a>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="color: whitesmoke;" th:text="'欢迎您！'+${seller.getT_seller().getT_seller_name()}">
+                </li>
+                <li><a href="/seller/logout">安全退出</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2" id="menulist">
+            <a id="shopInfo" class="list-group-item active" >
+                <!-- 小图标样式设置 -->
+                上架书籍</a>
+            <a id="improveShopLevel" class="list-group-item" >
+                提升店铺 </a>
+            <!--<a href="#" class="list-group-item" onclick="loadPage('page3')">-->
+                <!--提升书籍</a>-->
+            <a class="list-group-item" id="uploadCover">
+                上传商店封面</a>
+            <a class="list-group-item" id="viewPurchasedBooks">
+            查看已被购买的书籍</a>
+            <a class="list-group-item" id="viewDelegatedBooks">
+                查看已发货的书籍</a>
+
+        </div>
+        <!--左边菜单栏-->
+        <div class="col-sm-10" id="right">
+            <ol class="breadcrumb">
+                <li class="active">卖家
+                </li>
+                <li class="active">商店信息
+                </li>
+            </ol>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    商铺名称
+                    <span th:text="${seller.getT_shop().getT_shop_name()}" id="shopName"></span>
+                    <button id="alterName" class="btn btn-info btn-sm" >修改商铺名称</button>
+                </div>
+                <div class="panel-body" id="beforeContent">
+                    <div class="row">
+                        <div  th:each="book:${seller.getT_books()}" class="col-sm-4 text-center">
+                            <a >
+                           <img  class="img-rounded img-responsive"  th:src="@{'http://localhost:8001'+${book.getT_book_photo()}+'/1.jpg'}" style="width: 358px;height: 248px;">
+                           <!--<img  class="img-rounded img-responsive"  th:src="@{'file:///D:/STUDY/bishe/version02/jiushutao/buyer-8001/src/main/resources/static/'+${book.getT_book_photo()}+'/1.jpg'}" style="width: 358px;height: 248px;">-->
+                            <span th:text="${book.getT_book_name()}"></span>
+                                <button th:onclick="rack([[${book.getT_book_id()}]])"  class="pull-right small btn btn-sm btn-default">下架</button>
+                                <button  data-toggle="modal" data-target="#exampleModal"  class="pull-right small btn btn-sm btn-default">在主栏位/好书推荐栏位展示</button>
+                            </a>
+
+                            <!-- Modal 提升书籍等级部分-->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">书籍在主栏位/好书推荐栏位展示</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                           <h6>请先联系该微信，然后点击发送书籍按钮，并记录下对应书籍id发送给该微信联系人</h6>
+                                            <img style="width:460px;height: 412px;" th:src="@{http://localhost:8001/images/wechatme.jpg}">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" th:onclick="priority([[${book.getT_book_id()}]])" class="btn btn-primary">发送书籍</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="addNewShop" class="col-sm-4" style="text-align:center;width: 358px;height: 248px; border: 1px solid grey;">
+                            <div class="glyphicon glyphicon-plus" style="margin-top:40px; text-align: center; font-size: 100px;color: gray;"></div>
+
+                            <h6>上架书籍</h6>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--查看已购买书籍面板-->
+                <div class="panel-body hidden" id="viewPurchasedBooksContent" >
+                </div>
+
+                <!--查看已发货的书籍面板-->
+                <div class="panel-body hidden" id="viewDelegatedBooksContent" >
+                </div>
+
+
+                <!--查看购买的书籍信息面板-->
+                <div class="panel-body hidden" id="viewBookDetailContent" >
+                </div>
+
+                <!--提升店铺面板-->
+                <div class="panel-body hidden" id="improveShopLevelContent" >
+                    <h1>请先联系以下微信，再点击发送商铺按钮,并将商铺id发送给以下微信联系人</h1>
+                    <img th:src="@{http://localhost:8001/images/wechatme.jpg}" style="width:460px;height:412px;">
+                    <button class="btn btn-info " th:onclick="sendShop([[${seller.getT_seller().getT_shop_id()}]])">发送商铺</button>
+                </div>
+
+                <!--上架新书籍界面-->
+                <div class="panel-body hidden" id="shelves" >
+
+                    <form id="form"  action="/seller/addNewBook" class="form-horizontal" role="form" enctype="multipart/form-data" style=" max-width: 600px;  padding: 15px;  margin: 0 auto;">
+
+
+
+                        <div class="form-group">
+                            <label for="bookname" class="col-sm-2 control-label">书名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="bookname" name="bookname"  placeholder="请输入书籍名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="originprice" class="col-sm-2 control-label">原价</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="originprice" name="originprice" placeholder="原价">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="nowprice" class="col-sm-2 control-label">现价</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="nowprice" name="nowprice" placeholder="现价">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="press" class="col-sm-2 control-label">出版社</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="press" name="press"  placeholder="出版社">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="desc" class="col-sm-2 control-label">书籍相关信息</label>
+                            <textarea class="col-sm-10 form-control" style="width:80%;margin-left: 18px;" id="desc" name="desc" placeholder="请输入书籍新旧程度等信息" rows="3"></textarea>
+                            </div>
+                        <div class="form-group row">
+                            <label for="category" class="col-sm-2 ">选择列表</label>
+                            <select name="category" id="category" class="col-sm-10 form-control" style="width:80%;margin-left: 18px;">
+                                <option value="A">A 马克思类</option>
+                                <option value="B">B 哲学/宗教</option>
+                                <option value="C">C 社会科学总论</option>
+                                <option value="D">D 政治/法律</option>
+                                <option value="E">E 军事</option>
+                                <option value="F">F 经济</option>
+                                <option value="G">G 文化</option>
+                                <option value="H">H 语言</option>
+                                <option value="I">I 文学</option>
+                                <option value="J">J 艺术</option>
+                                <option value="K">K 历史/地理</option>
+                            </select>
+                        </div>
+
+                        <input name="shopid"  th:value="${seller.getT_seller().getT_shop_id()}"  class="hidden"/>
+                        <input name="phone"  th:value="${seller.getT_seller().getT_seller_phone()}"  class="hidden"/>
+                        <div class="form-group">
+                            <label for="category" class="col-sm-2 ">选择要上传的书籍图片，不超过5张</label>
+                        <input class="col-sm-5 form-control" style="margin-left:20px;width: 200px;" type="file" name="fileName" id="filename" accept="image/png, image/jpeg, image/jpg" multiple="multiple" onchange="checkImage(this)">
+                        <input class="col-sm-5 form-control"  style="width: 250px;"  type="button" id="submitBtn" th:onclick="checkSubmit([[${seller.getT_seller().getT_shop_id()}]])" value="点击上传"/>
+
+                        </div>
+                        <div id="onLoadImage">图片预览区域
+                        </div>
+                        <div class="row">
+                        <button style="margin-left: 300px;" type="submit" class="btn btn-default" >提交</button>
+
+                        </div>
+                    </form>
+                    <button  style="margin-left: 300px;margin-right: 230px;" class="pull-right btn btn-danger" id="reject">放弃上架</button>
+
+
+
+
+
+            </div>
+
+                <!--上传书籍封面-->
+                <div class="panel-body hidden" id="uploadCoverContent" >
+                    <form id="formUpload" action="/seller/fileUpload"  method="post" enctype="multipart/form-data">
+                        <label>上传商铺封面图片</label>
+                        <input type="text" name="shopid" class="hidden" th:value="${seller.getT_shop().getT_shop_id()}">
+                        <input type="file" name="file"/>
+                        <input type="button" id="uploadCoverImage" value="上传"/>
+                    </form>
+                    <p>图片预览:</p>
+                    <img id="present"/>
+                </div>
+
+        </div>
+    </div>
+</div>
+<!-- 底部页脚部分 -->
+<div class="footer">
+    <p class="text-center">
+        2021 &copy; jiushutao.cn
+    </p>
+</div>
+</div>
+</body>
+<script>
+
+    /*
+    确认发货
+    */
+    function requireSend(bookid) {
+        console.log(bookid)
+        $.ajax({
+            url:"/seller/updateStatusByBookidAndStatus?bookid="+bookid+"&status=2",
+            type:"get",
+            success:function (data) {
+                if(data!=0){
+                    alert("发货成功")
+
+                }else{
+                    alert("发货失败")
+                }
+            },error:function () {
+                alert("ajax")
+            }
+        })
+        $(this).addClass('hidden')
+    }
+
+    /*
+    查看书籍信息
+    */
+    function showBookDetail(bookid){
+        console.log(bookid)
+        $.ajax({
+            url:"/seller/getBookAndBuyer?bookid="+bookid,
+            type:"get",
+            success:function (data) {
+                console.log(data)
+                $('#viewBookDetailContent').removeClass('hidden');
+                $('#viewDelegatedBooksContent').addClass('hidden');
+                $('#viewPurchasedBooksContent').addClass('hidden');
+                $('#improveShopLevelContent').addClass('hidden');
+                $('#uploadCoverContent').addClass('hidden');
+                $('#beforeContent').addClass('hidden');
+                var contentDiv="<h1>买家信息：</h1><hr><h3>收货人姓名："+data.t_buyer.t_buyer_name+"</h3>"+
+                "<hr><h3>收货人电话："+data.t_buyer.t_buyer_phone+"</h3><hr><h3>收货人地址："+data.t_buyer.t_buyer_address+"</h3><hr>"
+                +"<h3>下单时间："+data.date+"</h3><hr><h1>书籍信息：</h1><hr><h3>书籍名称："+data.t_book.t_book_name+"</h3><hr>"+
+                "<h3>书籍价格："+data.t_book.t_book_now_price+"</h3>";
+                if(data.t_book.t_book_status==1){
+                    contentDiv+="<button class='btn btn-info' onclick='requireSend("+data.t_book.t_book_id+")'>确认发货</button>";
+                }
+                $('#viewBookDetailContent').html(contentDiv);
+
+
+            },error:function (data) {
+                alert("ajax-")
+            }
+        })
+    }
+
+
+    /*
+    查看已发货书籍
+    */
+    $('#viewDelegatedBooks').click(function () {
+        $.ajax({
+
+            url:"/seller/getAllBooksDelegated?sellerid="+$('#shopidText').text(),
+            type:"get",
+            success:function (data) {
+                console.log(data);
+                $('#viewBookDetailContent').addClass('hidden');
+                $('#viewDelegatedBooksContent').removeClass('hidden');
+                $('#viewPurchasedBooksContent').addClass('hidden');
+                $('#improveShopLevelContent').addClass('hidden');
+                $('#uploadCoverContent').addClass('hidden');
+                $('#beforeContent').addClass('hidden');
+                var divContent="";
+                for(var i=0;i<data.length;i++){
+                    divContent+="<div class='col-md-4'>";
+                    divContent+=" <a onclick='showBookDetail("+data[i].t_book_id+")'>"+
+                        "<img class='img-rounded img-responsive' style='width:360px;height:229px;' src='http://localhost:8001"+data[i].t_book_photo+"/1.jpg'>"+"<br>"+
+                        "<span class='text-center center-block'>"+data[i].t_book_name+"</span>"+"</a>"+"</div>";
+                }
+                $('#viewDelegatedBooksContent').html(divContent);
+            }
+        })
+    })
+
+    /*
+    查看已购买书籍
+    */
+    $('#viewPurchasedBooks').click(function () {
+        console.log($('#shopidText').text())
+        $.ajax({
+
+            url:"/seller/getAllBooksPurchase?sellerid="+$('#shopidText').text(),
+            type:"get",
+            success:function (data) {
+                console.log(data);
+                $('#viewBookDetailContent').addClass('hidden');
+                $('#viewPurchasedBooksContent').removeClass('hidden');
+                $('#improveShopLevelContent').addClass('hidden');
+                $('#uploadCoverContent').addClass('hidden');
+                $('#beforeContent').addClass('hidden');
+                var divContent="";
+                for(var i=0;i<data.length;i++){
+                    divContent+="<div class='col-md-4'>";
+                    divContent+=" <a onclick='showBookDetail("+data[i].t_book_id+")'>"+
+                        "<img class='img-rounded img-responsive' style='width:360px;height:229px;' src='http://localhost:8001"+data[i].t_book_photo+"/1.jpg'>"+"<br>"+
+                        "<span class='text-center center-block'>"+data[i].t_book_name+"</span>"+"</a>"+"</div>";
+                }
+                $('#viewPurchasedBooksContent').html(divContent);
+            }
+        })
+    })
+
+    /*
+    上架新书籍
+    */
+    // $('#submitBtn1').click(function () {
+    //     $.ajax({
+    //         url:"/seller/addNewBook",
+    //         data:$('#form').serialize(),
+    //         success:function (data) {
+    //             alert(data)
+    //         },
+    //         error:function (data) {
+    //             alert("ajxa--------")
+    //         }
+    //     })
+    // })
+
+    /*
+    发送商铺按钮
+    */
+    function sendShop(sellerid) {
+        $.ajax({
+            url:"/seller/sendShopid",
+            type:"post",
+            data:{"shopid":sellerid},
+            success:function (status) {
+                if(status!=0){
+                    alert("发送成功,商铺id为："+sellerid)
+                }else{
+                    alert("发送失败，9003端没开吗")
+                }
+            },error:function (data) {
+                alert("ajax-sendshop")
+            }
+        })
+    }
+
+    /*
+    提升书籍优先级，在主栏位展示
+    */
+    function priority(bookid){
+        $.ajax({
+            url:"/seller/sendBookid",
+            type:"post",
+            data:{"bookid":bookid},
+            success:function (status) {
+                if(status!=0){
+                    alert("发送成功，书籍id为："+bookid)
+                }else{
+                    alert("发送失败，9003端没开吗")
+                }
+            },error:function (data) {
+                alert("ajax-sendshop")
+            }
+        })
+    }
+
+
+    /*
+    提升店铺
+    */
+    $('#improveShopLevel').click(function () {
+        $('#menulist a').removeClass('active');
+        $(this).addClass('active');
+        $('#beforeContent').addClass('hidden');
+        $('#shelves').addClass('hidden');
+        $('#uploadCoverContent').addClass('hidden');
+        $('#improveShopLevelContent').removeClass('hidden')
+    })
+
+
+    /*
+    切换到上架书籍
+    */
+    $('#shopInfo').click(function () {
+        $('#menulist a').removeClass('active');
+        $(this).addClass('active');
+        $('#beforeContent').removeClass('hidden');
+        $('#shelves').addClass('hidden');
+        $('#uploadCoverContent').addClass('hidden');
+        $('#improveShopLevelContent').addClass('hidden');
+    })
+
+    /*
+    切换到上传商店封面
+    */
+    $('#uploadCover').click(function () {
+        $('#menulist a').removeClass('active');
+        $(this).addClass('active');
+        $('#beforeContent').addClass('hidden');
+        $('#shelves').addClass('hidden');
+        $('#uploadCoverContent').removeClass('hidden');
+        $('#improveShopLevelContent').addClass('hidden');
+    })
+
+    /*
+  上传封面图片
+  */
+    $('#uploadCoverImage').click(function () {
+        console.log(new FormData($('#formUpload')[0]))
+        var dd=new FormData($('#formUpload')[0]);
+        dd.append("shopid",$('#shopidText').text());
+        $.ajax({
+            url:"/seller/fileUpload",
+            data:dd,
+            type:"post",
+            cache: false,
+            processData: false,
+            contentType: false
+        }).done(function (res) {
+            var obj=JSON.parse(res);
+            alert("res====>",obj.url)
+            $('#present').attr("src",obj.url);
+        }).fail(function (res) {
+            alert("上传失败，请重试，ajax错误，怀疑是shopid挂了，需要先登录才能获取到shopid，不能直接访问该页面，否则不能获取到shopid")
+        })
+    })
+
+
+
+
+    /*
+    * 上架新书
+    * */
+    $('#addNewShop').click(function () {
+        $('#shelves').removeClass("hidden");
+        $('#beforeContent').addClass('hidden');
+    })
+
+    /*
+    放弃上架书籍，返回首页
+    */
+    $('#reject').click(function () {
+      var phone=  sessionStorage['sellerPhone'];
+// alert(phone)
+        console.log("phone",phone);
+        window.location.href="/seller/enterAdmin?phone="+phone;
+    })
+
+
+
+    /*
+    图片上传
+    */
+    var curFiles = [];//文件数组，用来保存上传的文件信息
+
+    //检查上传的图片
+    function checkImage(obj) {
+        var files = obj.files;
+        console.log(files.length);
+        if(files){
+
+            if(files.length <= 5) {//把一次上传图片数限制在5张
+                for (var i = 0; i < files.length; i++) {
+                    var item = files.item(i);
+                    var size = item.size;
+                    if (size / 1000 < 100) { //简易大小限制100K
+                        curFiles.push(item);
+                    }
+                    else {
+                        alert("第" + (i + 1) + "张图片过大");
+                    }
+                }
+            }
+            else{
+                $("#filename").val("");
+                alert("一次最多上传5张图片");
+            }
+        }
+        else {
+            $("#filename").val("");
+            alert("请选择上传文件");
+        }
+
+        //去除文件名相同的情况（上传列表中多次出现同一个文件）
+        for (var i = 0; i < curFiles.length - 1; i++) {
+            for (var j = 1; j < curFiles.length; j++) {
+                if (i != j) {
+                    if (curFiles[i].name == curFiles[j].name) {
+                        curFiles.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        //判断上传图片大小(100KB)
+        for(var i = 0; i < curFiles.length; i++){
+            var size = curFiles[i].size;
+            if(size/1000>100){
+                curFiles.splice(i, 1);
+            }
+
+        }
+
+        console.log(curFiles);
+
+        onLoadImage();
+    }
+
+    //预览图片
+    function onLoadImage() {
+        $("#onLoadImage").html("");
+        for(var i = 0; i < curFiles.length; i++){
+            (function(i){
+                var file = curFiles[i];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(){
+                    $('#onLoadImage').append("<img src='"+reader.result+"'/><span><span>"+file.name+"</span><button id='"+i+"' onclick='del(this.id)'>删除</button></span><br>");
+                }
+            })(i)
+        }
+    }
+
+    //删除功能
+    function del(id) {
+        var name = $("#"+id).prev().text();
+        console.log(name);
+        curFiles = curFiles.filter(function(file) {
+            return file.name !== name;
+        });
+        console.log(curFiles);
+        onLoadImage();
+    }
+
+    //上传功能的实现
+    function checkSubmit(shopid) {
+        if(curFiles.length>0){
+            var formdata =  new FormData($('#form')[0]);
+
+            console.log(formdata)
+            for (var i = 0; i<curFiles.length; i++) {
+                formdata.append('uploadFiles', curFiles[i]);
+            }
+            formdata.append("shopid",shopid);
+        console.log("==============")
+            console.log(formdata);
+            $.ajax({
+                url: '/seller/multipleImageUpload',
+                type: 'post',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // alert(data.length+"个上传结果");
+                    for(var k in data){
+                        var num=Number(k)+1;
+                        alert("第"+num+"张上传结果："+data[k].result_msg);
+                        // if(data[k].hasOwnProperty("relativePath"))
+                            // alert("第"+num+"张相对路径："+data[k].relativePath);
+                    }
+                },
+                error: function(err) {
+                    alert("上传失败");
+                }
+            });
+        }
+        else{
+            alert("请选择文件后上传");
+        }
+    }
+
+
+    /*
+    下架商品
+    */
+    function rack(bookid){
+       var rackItem= confirm("确认下架该商品？");
+       if(rackItem==true){
+           $.ajax({
+               url:"/seller/rackBookByBookid",
+               type:"post",
+               data:{
+                   "bookid":bookid
+               },
+               success:function (data) {
+                   window.location.reload()
+               },
+               error:function (data) {
+                   alert("ajax--------rack")
+               }
+           })
+
+       }
+
+    }
+
+    /*
+    上架书籍
+    */
+    $('#addNewShop').click(function () {
+        $('#beforeContent').addClass('hidden');
+        $('#shelves').removeClass('hidden');
+    })
+
+
+    /*
+    * 修改商铺名称
+    *
+    */
+    $('#alterName').click(function () {
+        alert($('#shopidText').text())
+        var name=prompt("请输入要修改的商店名称")
+        $.ajax({
+            url:"/seller/updateShopnameByShopid",
+            data:{
+                "shopid":$('#shopidText').text(),
+                "shopname":name
+            },
+            type:"post",
+            success:function (data) {
+                $('#shopName').text(name);
+            },
+            error:function (data) {
+                alert("ajax----altername")
+            }
+        })
+
+    });
+
+
+
+
+    /*
+           * 对选中的标签激活active状态，对先前处于active状态但之后未被选中的标签取消active
+           * （实现左侧菜单中的标签点击后变色的效果）
+           */
+    $(document).ready(function () {
+        $('#menulist> a').click(function (e) {
+            //e.preventDefault();    加上这句则导航的<a>标签会失效
+            $('#menulist> a').removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+
+
+    function loadPage(url) {
+        $.get(url,function(data,status){
+            $("#right").html(data);
+        });
+    }
+</script>
+</html>>

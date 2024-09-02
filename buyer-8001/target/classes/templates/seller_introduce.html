@@ -1,0 +1,554 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>8002端口卖家模块</title>
+    <style type="text/css">
+        /*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #F7F7F7 url(/images/img01.jpg) repeat-x left top;
+            /*font-family: Arial, Helvetica, sans-serif;*/
+            font-size: 12px;
+            color: #787878;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            padding: 0;
+            /*font-family: Georgia, "Times New Roman", Times, serif;*/
+            font-weight: normal;
+            color: #8A8A8A;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.8em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+        }
+
+        p, ul, ol {
+            margin-top: 0;
+            line-height: 180%;
+        }
+
+        ul, ol {
+        }
+
+        a {
+            text-decoration: none;
+            color: #01BBEC;
+        }
+
+        a:hover {
+        }
+
+        #wrapper {
+            width: 960px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* Header */
+
+        #header {
+            width: 960px;
+            height: 110px;
+            margin: 0 auto;
+        }
+
+        /* Logo */
+
+        #logo {
+            float: left;
+            height: 65px;
+            margin: 0;
+            padding-top: 20px;
+            color: #FFFFFF;
+        }
+
+        #logo h1, #logo p {
+            margin: 0;
+            padding: 0;
+        }
+
+        #logo h1 {
+            float: left;
+            letter-spacing: -1px;
+            text-transform: lowercase;
+            font-size: 2.6em;
+        }
+
+        #logo p {
+            float: left;
+            margin: 0;
+            padding: 12px 0 0 10px;
+            font: normal 14px Georgia, "Times New Roman", Times, serif;
+            font-style: italic;
+        }
+
+        #logo a {
+            border: none;
+            background: none;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        /* Search */
+
+        #search {
+            float: right;
+            width: 301px;
+            height: 110px;
+            padding: 0;
+            background: url(images/img02.jpg) no-repeat left top;
+        }
+
+        #search form {
+            height: 41px;
+            margin: 0;
+            padding: 10px 0 0 20px;
+        }
+
+        #search fieldset {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        #search-text {
+            width: 195px;
+            padding: 4px 5px;
+            border: 1px solid #DEDEDE;
+            background: #FFFFFF;
+            text-transform: lowercase;
+            font: normal 11px Arial, Helvetica, sans-serif;
+            color: #5D781D;
+        }
+
+        #search-submit {
+            width: 50px;
+            height: 25px;
+            border: none;
+            background: url(/images/img03.jpg) no-repeat left top;
+            color: #FFFFFF;
+        }
+
+        /* Menu */
+
+        #menu {
+            width: 960px;
+            height: 38px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        #menu ul {
+            margin: 0;
+            padding: 0px 0px 0px 25px;
+            list-style: none;
+            line-height: normal;
+        }
+
+        #menu li {
+            float: left;
+            height: 38px;
+            background: url(/images/img04.jpg) no-repeat right top;
+        }
+
+        #menu a {
+            display: block;
+            margin-right: 3px;
+            padding: 10px 30px 7px 30px;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            color: #AFAFAF;
+            border: none;
+        }
+
+        #menu a:hover, #menu .current_page_item a {
+        }
+
+        #menu .current_page_item a {
+            padding-left: 0;
+        }
+
+        #menu a:hover {
+            text-decoration: underline;
+        }
+
+        /* Page */
+
+        #page {
+            width: 960px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        #page-bgtop {
+            padding: 20px 25px;
+        }
+
+        #page-bgbtm {
+        }
+
+        /* Content */
+
+        #content {
+            float: right;
+            width: 730px;
+            padding: 0;
+        }
+
+        .post {
+            margin-bottom: 25px;
+            padding: 20px 0px;
+            background: #FFFFFF;
+        }
+
+        .post-bgtop {
+        }
+
+        .post-bgbtm {
+        }
+
+        .post .title {
+            height: 38px;
+            margin-bottom: 10px;
+            padding: 12px 0 0 20px;
+            background: #01BBEC;
+            letter-spacing: -.5px;
+            color: #FFFFFF;
+        }
+
+        .post .title a {
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .post .meta {
+            padding-bottom: 5px;
+            padding-left: 20px;
+            text-align: left;
+            /*font-family: Arial, Helvetica, sans-serif;*/
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        .post .meta a {
+            color: #01BBEC;
+        }
+
+        .post .entry {
+            padding: 0px 20px 20px 20px;
+            padding-bottom: 20px;
+            text-align: justify;
+        }
+
+        .links {
+            display: block;
+            width: 100px;
+            height: 20px;
+            margin-top: 20px;
+            background: url(/images/img05.jpg) no-repeat left top;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 10px;
+            color: #FFFFFF;
+        }
+
+        /* Sidebar */
+
+        #sidebar {
+            float: left;
+            width: 175px;
+            padding: 20px 0px 0px 0px;
+            color: #787878;
+            background: #FFFFFF;
+        }
+
+        #sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #sidebar li {
+            margin: 0;
+            padding: 0;
+        }
+
+        #sidebar li ul {
+            margin: 0px 15px;
+            padding-bottom: 30px;
+        }
+
+        #sidebar li li {
+            line-height: 35px;
+            border-bottom: 1px dashed black;
+            padding-left: 10px;
+        }
+
+        #sidebar li li span {
+            display: block;
+            margin-top: -20px;
+            padding: 0;
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        #sidebar h2 {
+            height: 38px;
+            padding: 12px 0 0 20px;
+            background: #01BBEC;
+            letter-spacing: -.5px;
+            color: #FFFFFF;
+        }
+
+        #sidebar p {
+            margin: 0 0px;
+            padding: 0px 20px 20px 20px;
+            text-align: justify;
+        }
+
+        #sidebar a {
+            border: none;
+            /*color: #01BBEC;*/
+        }
+
+        #sidebar a:hover {
+            text-decoration: underline;
+            color: #8A8A8A;
+        }
+
+        /* Calendar */
+
+        #calendar {
+        }
+
+        #calendar_wrap {
+            padding: 20px;
+        }
+
+        #calendar table {
+            width: 100%;
+        }
+
+        #calendar tbody td {
+            text-align: center;
+        }
+
+        #calendar #next {
+            text-align: right;
+        }
+
+        /* Footer */
+
+        #footer {
+            width: 960px;
+            height: 50px;
+            margin: 0 auto;
+            padding: 0px 0 15px 0;
+            border-top: 1px solid #DEDEDE;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #footer p {
+            margin: 0;
+            padding-top: 20px;
+            line-height: normal;
+            font-size: 9px;
+            text-transform: uppercase;
+            text-align: center;
+            color: #A0A0A0;
+        }
+
+        #footer a {
+            color: #8A8A8A;
+        }
+    </style>
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script>
+        function loginPageshow() {
+            document.getElementById("shangjiaPage").setAttribute("hidden",true);
+            document.getElementById("tishenpage").setAttribute("hidden",true);
+            document.getElementById("shangchuanfengmian").setAttribute("hidden",true);
+            document.getElementById("yigoumaishuji").setAttribute("hidden",true);
+            document.getElementById("yifahuoshuji").setAttribute("hidden",true);
+            $('#loginSellerPage').removeAttr("hidden");
+        }
+        function shangjiaPageshow(){
+            document.getElementById("loginSellerPage").setAttribute("hidden",true);
+            document.getElementById("tishenpage").setAttribute("hidden",true);
+            document.getElementById("shangchuanfengmian").setAttribute("hidden",true);
+            document.getElementById("yigoumaishuji").setAttribute("hidden",true);
+            document.getElementById("yifahuoshuji").setAttribute("hidden",true);
+            $('#shangjiaPage').removeAttr("hidden");
+            // $('#loginSellerPage').hidden=true;
+            // $('#shangjiaPage').removeAttr("hidden");
+            // $('#tishenpage').hidden=true;
+            // $('#shangchuanfengmian').hidden=true;
+            // $('#yifahuoshuji').hidden=true;
+            // $('#yigoumaishuji').hidden=true;
+        }
+        function tishengPageshow (){
+            document.getElementById("loginSellerPage").setAttribute("hidden",true);
+            document.getElementById("shangjiaPage").setAttribute("hidden",true);
+            document.getElementById("shangchuanfengmian").setAttribute("hidden",true);
+            document.getElementById("yigoumaishuji").setAttribute("hidden",true);
+            document.getElementById("yifahuoshuji").setAttribute("hidden",true);
+            $('#tishenpage').removeAttr("hidden");
+        }
+        function shangchuanPageshow(){
+            document.getElementById("loginSellerPage").setAttribute("hidden",true);
+            document.getElementById("shangjiaPage").setAttribute("hidden",true);
+            document.getElementById("tishenpage").setAttribute("hidden",true);
+            document.getElementById("yigoumaishuji").setAttribute("hidden",true);
+            document.getElementById("yifahuoshuji").setAttribute("hidden",true);
+            $('#shangchuanfengmian').removeAttr("hidden");
+        }
+        function yigoumaiPageshow(){
+            document.getElementById("loginSellerPage").setAttribute("hidden",true);
+            document.getElementById("shangjiaPage").setAttribute("hidden",true);
+            document.getElementById("tishenpage").setAttribute("hidden",true);
+            document.getElementById("shangchuanfengmian").setAttribute("hidden",true);
+            document.getElementById("yifahuoshuji").setAttribute("hidden",true);
+            $('#yigoumaishuji').removeAttr("hidden");
+        }
+        function yifahuoPageshow(){
+            document.getElementById("loginSellerPage").setAttribute("hidden",true);
+            document.getElementById("shangjiaPage").setAttribute("hidden",true);
+            document.getElementById("tishenpage").setAttribute("hidden",true);
+            document.getElementById("shangchuanfengmian").setAttribute("hidden",true);
+            document.getElementById("yigoumaishuji").setAttribute("hidden",true);
+            $('#yifahuoshuji').removeAttr("hidden");
+        }
+    </script>
+</head>
+<body>
+<div id="wrapper"><a style="font-size: large" href="/">返回首页</a>
+    <div id="header">
+
+        <h2 style="margin-top:30px;margin-left:35px;color: black">
+
+            <a href="http://localhost:8002/" style="color: #00F7DE">点击跳转卖家登录</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color: red">测试账号：15712345678 &nbsp;&nbsp;&nbsp;&nbsp;   测试密码：1234chenxin</span>
+            <br/><br/>
+            如果访问失败，可能是由于服务器内存不足，该8002端口卖家模块无法上线，故暂以图片展示
+
+
+        </h2>
+    </div>
+    <!-- end #header -->
+
+    <!-- end #menu -->
+    <div id="page">
+        <div id="page-bgtop">
+            <div id="page-bgbtm">
+                <div id="content">
+                    <div class="post" id="loginSellerPage">
+                        <h3 class="title" style="text-align: center"><p>登录 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：使用cookie保存卖家信息，当未点击安全退出时，可继续访问原先页面</p>
+                        <!--<div class="entry">-->
+                           <img src="/upload/sellerFolders/login.png" th:src="@{/upload/sellerFolders/login.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+                        <div class="post " id="shangjiaPage" hidden>
+                            <h3 class="title" style="text-align: center"><p>上架书籍 </p></h3>
+                            <p style="font-size: large;color: black;margin-left: 15px;">功能：输入要上架书籍的信息，即可在买家页面展示</p>
+                            <p style="font-size: large;color: black;margin-left: 15px;"><b>亮点：</b>能根据输入的图片个数进行展示，例如输入3张图片，则可在书籍信息看见三张图片，多上传的图片自动忽略</p>
+                            <!--<div class="entry">-->
+                                <img src="/upload/sellerFolders/upload.png" th:src="@{/upload/sellerFolders/upload.png}" style="width: 100%;">
+                            <!--</div>-->
+                        </div>
+
+                    <div class="post " id="tishenpage" hidden>
+                        <h3 class="title" style="text-align: center"><p>提升店铺 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：点击发送商铺按钮，获得商铺id，后台会将id发送给管理员模块，然后添加管理员微信商定提升店铺价格</p>
+                        <!--<div class="entry">-->
+                            <img src="/upload/sellerFolders/improveShop.png" th:src="@{/upload/sellerFolders/improveShop.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+
+                    <div class="post " id="shangchuanfengmian" hidden>
+                        <h3 class="title" style="text-align: center"><p>上传商店封面 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：选择本地图片上传</p>
+                        <!--<div class="entry">-->
+                            <img src="/upload/sellerFolders/uploadPage.png" th:src="@{/upload/sellerFolders/uploadPage.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+
+                    <div class="post " id="yigoumaishuji"  hidden>
+                        <h3 class="title" style="text-align: center"><p>查看已购买书籍 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：可以查看已被购买的上架书籍，若已经寄出，则可以点击发货按钮</p>
+                        <!--<div class="entry">-->
+                            <img src="/upload/sellerFolders/viewpurchasedbook1.png" th:src="@{/upload/sellerFolders/viewpurchasedbook1.png}" style="width: 100%;">
+                        <br>
+                            <img src="/upload/sellerFolders/viewpurchasedbook2.png" th:src="@{/upload/sellerFolders/viewpurchasedbook2.png}" style="width: 100%;">
+                         <br>   <img src="/upload/sellerFolders/viewpurchasedbook3.png" th:src="@{/upload/sellerFolders/viewpurchasedbook3.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+
+                    <div class="post " id="yifahuoshuji" hidden>
+                        <h3 class="title" style="text-align: center"><p>查看已发货书籍 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：可以查看已被购买的，且已经点击发货按钮的书籍</p>
+                        <!--<div class="entry">-->
+                            <img src="/upload/sellerFolders/alreadyDelegated.png" th:src="@{/upload/sellerFolders/alreadyDelegated.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+
+
+                    <div style="clear: both;">&nbsp;</div>
+                </div>
+                <!-- end #content -->
+                <div id="sidebar">
+                    <ul>
+
+                        <li>
+                            <h2>卖家模块功能</h2>
+                            <ul>
+                                <li><h3><a href="javascript:void(0);" onclick="loginPageshow()">登录界面</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="shangjiaPageshow()">上架书籍</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="tishengPageshow()">提升店铺</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="shangchuanPageshow()">上传商店封面</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="yigoumaiPageshow()">查看已购买书籍</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="yifahuoPageshow()">查看已发货书籍</a></h3></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- end #sidebar -->
+                <div style="clear: both;">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <!-- end #page -->
+</div>
+
+<div id="footer">
+    <div class="panel-title text-center " style="align:center;text-align:center;font-size: small"><a href="https://beian.miit.gov.cn" target="_blank">备案号：鄂ICP备2023006451-1号</a></div>
+
+</div>
+
+<!-- end #footer -->
+</body>
+</html>
+<span style="display:none;"></span>
+

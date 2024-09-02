@@ -1,0 +1,53 @@
+.navbar-nav > li > a {
+    padding-top: 4px;
+    padding-bottom: 0;
+    height: 28px;
+}
+
+.navbar {
+    min-height: 20px;
+}
+
+.navbar-brand {
+    padding-top: 4px;
+    padding-bottom: 0;
+    height: 28px;
+}
+
+.search-align {
+    padding-top: 25px;
+}
+
+.blue-background {
+    background-color: #5bc0de;
+
+}
+
+.tao-sidebar {
+    position: fixed;
+    top: 47%;
+    left: 0;
+}
+
+.img-rounded {
+    border-radius: 10%;
+    border: 1px solid #ddd;
+    padding: 4px;
+}
+
+
+.img-border{
+    border: 3px solid cadetblue;
+}
+/*
+商品详情页面的小图片css
+ */
+/*cursor: pointer; border-radius: 5%; border: 1px solid #dddddd;width:67px;height: 42px; margin:20px;*/
+.detail-img{
+    cursor: pointer;
+    border-radius: 5%;
+    border: 1px solid #dddddd;
+    width:67px;
+    height: 42px;
+    margin:20px;
+}

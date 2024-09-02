@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>管理员后台系统</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+    .lanwei{
+        color: red;
+    }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a class="icon-bar" href="javascript:void(0);">管理员后台系统</a>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ><p style="color: whitesmoke" th:text="${phone}+'欢迎您'"></p>  </li>
+                <li><a href="/admin/logout">安全退出</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2" id="menulist">
+            <a id="zhulanwei" class="list-group-item active" >主栏位 /好书推荐</a>
+            <a class="list-group-item" id="jinpaishuwu"> 金牌书屋</a>
+            <a class="list-group-item" id="viewBooks"> 查看所有主栏位/好书推荐栏位书籍</a>
+            <a class="list-group-item" id="viewShops"> 查看所有金牌书屋书店</a>
+
+        </div>
+        <!--左边菜单栏-->
+        <div class="col-sm-10" id="right">
+            <ol class="breadcrumb" >
+                <li id="leader1" class="lanwei">主栏位/好书推荐 </li>
+                <li id="leader2" >金牌书屋  </li>
+            </ol>
+
+            <!--书籍-->
+
+            <div class="panel panel-default" id="bookContent">
+                <div class="panel-heading">
+                   输入书籍id
+                    <div class="input-group col-md-3" style="marign-top:0px;position:relative;">
+                        <input type="text" id="bookid" class="form-control" placeholder="请输入书籍id"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info -search" id="searchBookBtn">查找</button>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="panel-body text-center" id="searchBook">
+                    <h1>书籍信息</h1>
+                    <hr>
+                    <p id="bookname"></p><br>
+                    <p id="bookpress"></p><hr>
+                    <p id="desc"></p><hr>
+                    <p id="position"></p><hr>
+                    <img id="bookimg" style="width:460px;height: 412px;"><hr>
+                     <span class="input-group-btn">
+                            <button onclick="improveBookLevel('2')" class="btn btn-info -search">在主栏位展示</button>
+                            <button  onclick="improveBookLevel('1')" style="margin-left: 30px;" class="btn btn-info -search">在好书推荐栏位展示</button>
+                     </span>
+                </div>
+
+
+                <div class="panel-body hidden" id="searchNone">
+                    <h1>没有查找到该书籍信息,请核对书籍id是否正确</h1>
+                </div>
+
+
+
+        </div>
+
+            <!--商铺信息-->
+            <div class="panel panel-default hidden" id="shopContent">
+                <div class="panel-heading">
+
+                    <div class="input-group col-md-3" style="marign-top:0px;position:relative;">
+                        <input type="text" id="shopid"  class="form-control" placeholder="请输入商铺id"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info -search" id="searchShopBtn">查找</button>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="panel-body text-center" id="searchShop">
+                    <h1>商铺信息</h1>
+                    <hr>
+                    <p id="shopname"></p><hr>
+                    <p id="sellername"></p><hr>
+                    <p id="sellerphone"></p><hr>
+                    <p id="currentLanwei"></p><hr>
+                    <span class="input-group-btn">
+                            <button class="btn btn-info -search" id="showInGoldColumn">在金牌书屋栏位展示</button>
+                     </span>
+                </div>
+
+
+                <div class="panel-body hidden" id="searchShopNone">
+                    <h1>没有查找到该商店信息,请核对商铺id是否正确</h1>
+                </div>
+
+
+
+            </div>
+
+
+            <!--查看所有书籍-->
+            <div class="panel panel-default hidden" id="viewBooksContent">
+
+
+                <table class="table">
+                    <caption>主栏位书籍</caption>
+                    <thead>
+                    <tr>
+                        <th>书籍id</th>
+                        <th>书籍名称</th>
+                        <th>书籍图片</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    <!--<tr>-->
+                        <!--<td>Tanmay</td>-->
+                        <!--<td>Bangalore</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>Sachin</td>-->
+                        <!--<td>Mumbai</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                </table>
+                <hr>
+                <table class="table">
+                    <caption>好书推荐栏位书籍</caption>
+                    <thead>
+                    <tr>
+                        <th>书籍id</th>
+                        <th>书籍名称</th>
+                        <th>书籍图片</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableBodyRecommend">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!--查看所有金牌书屋书店-->
+
+            <div class="panel panel-default hidden" id="viewGoldShopsContent">
+                <table class="table">
+                    <caption>金牌书屋栏位商店</caption>
+                    <thead>
+                    <tr>
+                        <th>商店id</th>
+                        <th>商店名称</th>
+                        <th>商店图片</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableBodyGold">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+<!-- 底部页脚部分 -->
+<div class="footer">
+    <p class="text-center">
+        2021 &copy; jiushutao.cn
+    </p>
+</div>
+</div>
+</body>
+<script>
+
+    /*
+    查看所有金牌书屋书店
+    */
+    $('#viewShops').click(function () {
+        $('#leader2').removeClass('lanwei')
+        $('#leader1').removeClass('lanwei')
+
+        $('#shopContent').addClass('hidden');
+        $('#bookContent').addClass('hidden');
+        $('#viewBooksContent').addClass('hidden');
+        $('#viewGoldShopsContent').removeClass('hidden');
+        $.ajax({
+            url:"/admin/allGoldShops",
+            type:"get",
+            success:function (data) {
+                console.log(data);
+                var tableHtml="";
+                for(var i =0;i<data.length;i++){
+                    tableHtml+="<tr id='"+data[i].t_shop_id+"'><td>"+data[i].t_shop_id+"</td>"
+                        +"<td>"+data[i].t_shop_name+"</td>"+
+                        "<td><img src='http://localhost:8001"+data[i].t_shop_photo+"/1.jpg' style='width:114px;height: 98px;'></td>"+
+                        "<td><button onclick='downgradeshop("+data[i].t_shop_id+")'>提前恢复到无需展示状态</button></td></tr>";
+                }
+                $('#tableBodyGold').html(tableHtml)
+            },
+            error:function (data) {
+                alert("ajax---viewBooks")
+            }
+        })
+    })
+
+    function downgradeshop(shopid){
+        alert(shopid)
+        $.ajax({
+            url:"/admin/updateShopPriorityByShopid",
+            data:{
+                "shopid":shopid,
+                "priority":0
+            },
+            type:"get",
+            success:function (data) {
+                if(data!=0){
+                    alert("恢复成功")
+
+                    $('#'+shopid).addClass('hidden');
+
+                }else{
+                    alert("提升失败，接口返回0，修改失败")
+                }
+            },
+            error:function (data) {
+                alert("ajax---improveBookLevel")
+            }
+        })
+    }
+
+
+
+
+    /*
+    查看所有主栏位、好书推荐栏位的书籍
+    */
+    $('#viewBooks').click(function () {
+        $('#leader2').removeClass('lanwei')
+        $('#leader1').removeClass('lanwei')
+
+        $('#shopContent').addClass('hidden');
+        $('#bookContent').addClass('hidden');
+        $('#viewBooksContent').removeClass('hidden');
+        $('#viewGoldShopsContent').addClass('hidden');
+
+        //主栏位
+       $.ajax({
+           url:"/admin/allMainBooks",
+           type:"get",
+           success:function (data) {
+               console.log(data);
+               var tableHtml="";
+               for(var i =0;i<data.length;i++){
+                   tableHtml+="<tr id='"+data[i].t_book_id+"'><td>"+data[i].t_book_id+"</td>"
+                   +"<td>"+data[i].t_book_name+"</td>"+
+                   "<td><img src='http://localhost:8001"+data[i].t_book_photo+"/1.jpg' style='width:114px;height: 98px;'></td>"+
+                   "<td><button onclick='downgrade("+data[i].t_book_id+")'>提前恢复到更多好书栏位</button></td></tr>";
+               }
+               $('#tableBody').html(tableHtml)
+           },
+           error:function (data) {
+               alert("ajax---viewBooks")
+           }
+       })
+
+        // 好书推荐
+        $.ajax({
+            url:"/admin/allRecomendBooks",
+            type:"get",
+            success:function (data) {
+                console.log(data);
+                var tableHtml="";
+                for(var i =0;i<data.length;i++){
+                    tableHtml+="<tr id='"+data[i].t_book_id+"'><td>"+data[i].t_book_id+"</td>"
+                        +"<td>"+data[i].t_book_name+"</td>"+
+                        "<td><img src='http://localhost:8001"+data[i].t_book_photo+"/1.jpg' style='width:114px;height: 98px;'></td>"+
+                        "<td><button onclick='downgrade("+data[i].t_book_id+")'>提前恢复到更多好书栏位</button></td></tr>";
+                }
+                $('#tableBodyRecommend').html(tableHtml)
+            },
+            error:function (data) {
+                alert("ajax---viewBooks")
+            }
+        })
+    })
+
+    function downgrade(bookid){
+        $.ajax({
+            url:"/admin/updatePriorityBook",
+            data:{
+                "priority":0,
+                "bookid":bookid
+            },
+            type:"post",
+            success:function (data) {
+                if(data!=0){
+                    alert("恢复成功")
+
+                    $('#'+bookid).addClass('hidden');
+
+                }else{
+                    alert("提升失败，接口返回0，修改失败")
+                }
+            },
+            error:function (data) {
+                alert("ajax---improveBookLevel")
+            }
+        })
+    }
+
+    /*
+        提升商店发优先权
+    */
+    $('#showInGoldColumn').click(function () {
+        $.ajax({
+            url:"/admin/liftShop",
+            data:{
+                "shopid":$('#shopid').val()
+            },
+            type:"post",
+            success:function (data) {
+                if(data==1){
+                    $.ajax({
+                        url:"/admin/getShopAndSellerByShopid",
+                        data:{
+                            "shopid":$('#shopid').val()
+                        },
+                        type:"post",
+                        success:function (data) {
+                            console.log(data)
+                            console.log(data.t_seller)
+                            console.log(data.t_shop)
+                            var seller=data.t_seller;
+                            var shop=data.t_shop;
+                            $('#shopname').text("商铺名称："+shop.t_shop_name);
+                            $('#sellername').text("商铺持有者名称："+seller.t_seller_name);
+                            $('#sellerphone').text("商铺持有者联系电话："+seller.t_seller_phone);
+                            var priority=shop.t_shop_priority;
+                            alert("提升成功")
+                            if(priority==0){
+                                $('#currentLanwei').text("该店铺在前台页面暂时没有栏位")
+                            }else if(priority==1){
+                                $('#currentLanwei').text("该店铺展示在金牌书屋栏位")
+                            }
+                        },
+                        error:function (data) {
+                            alert("ajax=--->searchShopBtn")
+                        }
+                    })
+                }else{
+                    alert("提升失败")
+                }
+            },
+            error:function (data) {
+                alert(data)
+            }
+        })
+    })
+
+
+    /*
+    商铺 -》点击查找
+    */
+    $('#searchShopBtn').click(function () {
+        $.ajax({
+            url:"/admin/getShopAndSellerByShopid",
+            data:{
+                "shopid":$('#shopid').val()
+            },
+            type:"post",
+            success:function (data) {
+                console.log(data)
+                console.log(data.t_seller)
+                console.log(data.t_shop)
+                var seller=data.t_seller;
+                var shop=data.t_shop;
+                $('#shopname').text("商铺名称："+shop.t_shop_name);
+                $('#sellername').text("商铺持有者名称："+seller.t_seller_name);
+                $('#sellerphone').text("商铺持有者联系电话："+seller.t_seller_phone);
+                var priority=shop.t_shop_priority;
+                if(priority==0){
+                    $('#currentLanwei').text("该店铺在前台页面暂时没有栏位")
+                }else if(priority==1){
+                    $('#currentLanwei').text("该店铺展示在金牌书屋栏位")
+                }
+            },
+            error:function (data) {
+                alert("ajax=--->searchShopBtn")
+            }
+        })
+    })
+
+    /*
+    点击主栏位/推荐好书
+    */
+    $('#zhulanwei').click(function () {
+        $('#bookContent').removeClass('hidden');
+        $('#shopContent').addClass('hidden');
+        $('#leader1').addClass('lanwei');
+        $('#leader2').removeClass('lanwei');
+        $('#viewGoldShopsContent').addClass('hidden');
+        $('#viewBooksContent').addClass('hidden')
+    })
+
+    /*
+    金牌书屋
+    */
+    $('#jinpaishuwu').click(function () {
+        $('#bookContent').addClass('hidden');
+        $('#shopContent').removeClass('hidden');
+        $('#leader1').removeClass('lanwei');
+        $('#leader2').addClass('lanwei');
+        $('#viewGoldShopsContent').addClass('hidden');
+        $('#viewBooksContent').addClass('hidden')
+    })
+
+    /*
+    提升书籍等级按钮
+    */
+    function improveBookLevel(priority){
+        $.ajax({
+            url:"/admin/updatePriorityBook",
+            data:{
+                "priority":priority,
+                "bookid":$('#bookid').val()
+            },
+            type:"post",
+            success:function (data) {
+                if(data!=0){
+                    alert("提升成功")
+                    $.ajax({
+                        url:"/admin/getBookByBookid",
+                        data:{
+                            "bookid":$('#bookid').val()
+                        },
+                        type:"post",
+                        success:function (data) {
+                            console.log(data)
+                            if(data!=null&&data!=""){
+                                $('#bookContent').removeClass('hidden');
+                                $('#shopContent').addClass('hidden');
+                                $('#searchBook').removeClass('hidden');
+                                $('#searchNone').addClass('hidden');
+                                $('#bookname').text("书籍名称："+data.t_book_name);
+                                $('#bookpress').text("书籍出版社信息："+data.t_book_press);
+                                $('#desc').text("书籍描述："+data.t_book_desc);
+                                $('#bookimg').attr("src","http://localhost:8001/"+data.t_book_photo+"/1.jpg");
+                                var priority=data.t_book_priority;
+                                if(priority==0){
+                                    $('#position').text("目前在更多好书栏位")
+                                }else if (priority==1) {
+                                    $('#position').text("目前在好书推荐栏位")
+                                }else if (priority==2){
+                                    $('#position').text("目前在主栏位")
+                                }
+                            }else{
+                                $('#bookContent').removeClass('hidden');
+                                $('#shopContent').addClass('hidden');
+                                $('#searchBook').addClass('hidden');
+                                $('#searchNone').removeClass('hidden');
+                            }
+                        },
+                        error:function (data) {
+                            alert("ajax------searchBookBtn")
+                        }
+                    })
+                }else{
+                    alert("提升失败，接口返回0，修改失败")
+                }
+            },
+            error:function (data) {
+                alert("ajax---improveBookLevel")
+            }
+        })
+    }
+
+
+    /*
+    查找书籍
+    */
+    $('#searchBookBtn').click(function () {
+        $.ajax({
+            url:"/admin/getBookByBookid",
+            data:{
+                "bookid":$('#bookid').val()
+            },
+            type:"post",
+            success:function (data) {
+                console.log(data)
+                if(data!=null&&data!=""){
+                    $('#bookContent').removeClass('hidden');
+                    $('#shopContent').addClass('hidden');
+                    $('#searchBook').removeClass('hidden');
+                    $('#searchNone').addClass('hidden');
+                    $('#bookname').text("书籍名称："+data.t_book_name);
+                    $('#bookpress').text("书籍出版社信息："+data.t_book_press);
+                    $('#desc').text("书籍描述："+data.t_book_desc);
+                    $('#bookimg').attr("src","http://localhost:8001/"+data.t_book_photo+"/1.jpg");
+                    var priority=data.t_book_priority;
+                    if(priority==0){
+                        $('#position').text("目前在更多好书栏位")
+                    }else if (priority==1) {
+                        $('#position').text("目前在好书推荐栏位")
+                    }else if (priority==2){
+                        $('#position').text("目前在主栏位")
+                    }
+                }else{
+                    $('#bookContent').removeClass('hidden');
+                    $('#shopContent').addClass('hidden');
+                    $('#searchBook').addClass('hidden');
+                    $('#searchNone').removeClass('hidden');
+                }
+            },
+            error:function (data) {
+                alert("ajax------searchBookBtn")
+            }
+        })
+    })
+
+
+    /*
+    发送商铺按钮
+    */
+    function sendShop(sellerid) {
+        $.ajax({
+            url:"/seller/sendShopid",
+            type:"post",
+            data:{"shopid":sellerid},
+            success:function (status) {
+                if(status!=0){
+                    alert("发送成功")
+                }else{
+                    alert("发送失败，9003端没开吗")
+                }
+            },error:function (data) {
+                alert("ajax-sendshop")
+            }
+        })
+    }
+
+    /*
+    提升书籍优先级，在主栏位展示
+    */
+    function priority(bookid){
+        $.ajax({
+            url:"/seller/sendBookid",
+            type:"post",
+            data:{"bookid":bookid},
+            success:function (status) {
+                if(status!=0){
+                    alert("发送成功")
+                }else{
+                    alert("发送失败，9003端没开吗")
+                }
+            },error:function (data) {
+                alert("ajax-sendshop")
+            }
+        })
+    }
+
+
+    /*
+    提升店铺
+    */
+    $('#improveShopLevel').click(function () {
+        $('#menulist a').removeClass('active');
+        $(this).addClass('active');
+        $('#beforeContent').addClass('hidden');
+        $('#shelves').addClass('hidden');
+        $('#uploadCoverContent').addClass('hidden');
+        $('#improveShopLevelContent').removeClass('hidden')
+    })
+
+
+    /*
+    切换到上架书籍
+    */
+    $('#shopInfo').click(function () {
+        $('#menulist a').removeClass('active');
+        $(this).addClass('active');
+        $('#beforeContent').removeClass('hidden');
+        $('#shelves').addClass('hidden');
+        $('#uploadCoverContent').addClass('hidden');
+        $('#improveShopLevelContent').addClass('hidden');
+    })
+
+    /*
+    切换到上传商店封面
+    */
+    $('#uploadCover').click(function () {
+        $('#menulist a').removeClass('active');
+        $(this).addClass('active');
+        $('#beforeContent').addClass('hidden');
+        $('#shelves').addClass('hidden');
+        $('#uploadCoverContent').removeClass('hidden');
+        $('#improveShopLevelContent').addClass('hidden');
+    })
+
+    /*
+  上传封面图片
+  */
+    $('#uploadCoverImage').click(function () {
+        console.log(new FormData($('#formUpload')[0]))
+        var dd=new FormData($('#formUpload')[0]);
+        dd.append("shopid",$('#shopidText').text());
+        $.ajax({
+            url:"/seller/fileUpload",
+            data:dd,
+            type:"post",
+            cache: false,
+            processData: false,
+            contentType: false
+        }).done(function (res) {
+            var obj=JSON.parse(res);
+            alert(obj.url)
+            $('#present').attr("src",obj.url);
+        }).fail(function (res) {
+            alert("上传失败，请重试，ajax错误，怀疑是shopid挂了，需要先登录才能获取到shopid，不能直接访问该页面，否则不能获取到shopid")
+        })
+    })
+
+
+
+
+    /*
+    * 上架新书
+    * */
+    $('#addNewShop').click(function () {
+        $('#shelves').removeClass("hidden");
+        $('#beforeContent').addClass('hidden');
+    })
+
+    /*
+    放弃上架书籍，返回首页
+    */
+    $('#reject').click(function () {
+      var phone=  sessionStorage['sellerPhone'];
+alert(phone)
+        window.location.href="/seller/enterAdmin?phone="+phone;
+    })
+
+
+
+    /*
+    图片上传
+    */
+    var curFiles = [];//文件数组，用来保存上传的文件信息
+
+    //检查上传的图片
+    function checkImage(obj) {
+        var files = obj.files;
+        console.log(files.length);
+        if(files){
+
+            if(files.length <= 5) {//把一次上传图片数限制在5张
+                for (var i = 0; i < files.length; i++) {
+                    var item = files.item(i);
+                    var size = item.size;
+                    if (size / 1000 < 100) { //简易大小限制100K
+                        curFiles.push(item);
+                    }
+                    else {
+                        alert("第" + (i + 1) + "张图片过大");
+                    }
+                }
+            }
+            else{
+                $("#filename").val("");
+                alert("一次最多上传5张图片");
+            }
+        }
+        else {
+            $("#filename").val("");
+            alert("请选择上传文件");
+        }
+
+        //去除文件名相同的情况（上传列表中多次出现同一个文件）
+        for (var i = 0; i < curFiles.length - 1; i++) {
+            for (var j = 1; j < curFiles.length; j++) {
+                if (i != j) {
+                    if (curFiles[i].name == curFiles[j].name) {
+                        curFiles.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        //判断上传图片大小(100KB)
+        for(var i = 0; i < curFiles.length; i++){
+            var size = curFiles[i].size;
+            if(size/1000>100){
+                curFiles.splice(i, 1);
+            }
+
+        }
+
+        console.log(curFiles);
+
+        onLoadImage();
+    }
+
+    //预览图片
+    function onLoadImage() {
+        $("#onLoadImage").html("");
+        for(var i = 0; i < curFiles.length; i++){
+            (function(i){
+                var file = curFiles[i];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(){
+                    $('#onLoadImage').append("<img src='"+reader.result+"'/><span><span>"+file.name+"</span><button id='"+i+"' onclick='del(this.id)'>删除</button></span><br>");
+                }
+            })(i)
+        }
+    }
+
+    //删除功能
+    function del(id) {
+        var name = $("#"+id).prev().text();
+        console.log(name);
+        curFiles = curFiles.filter(function(file) {
+            return file.name !== name;
+        });
+        console.log(curFiles);
+        onLoadImage();
+    }
+
+    //上传功能的实现
+    function checkSubmit(shopid) {
+        if(curFiles.length>0){
+            var formdata =  new FormData($('#form')[0]);
+
+            console.log(formdata)
+            for (var i = 0; i<curFiles.length; i++) {
+                formdata.append('uploadFiles', curFiles[i]);
+            }
+            formdata.append("shopid",shopid);
+        console.log("==============")
+            console.log(formdata);
+            $.ajax({
+                url: '/seller/multipleImageUpload',
+                type: 'post',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // alert(data.length+"个上传结果");
+                    for(var k in data){
+                        var num=Number(k)+1;
+                        alert("第"+num+"张上传结果："+data[k].result_msg);
+                        // if(data[k].hasOwnProperty("relativePath"))
+                            // alert("第"+num+"张相对路径："+data[k].relativePath);
+                    }
+                },
+                error: function(err) {
+                    alert("上传失败");
+                }
+            });
+        }
+        else{
+            alert("请选择文件后上传");
+        }
+    }
+
+
+    /*
+    下架商品
+    */
+    function rack(bookid){
+       var rackItem= confirm("确认下架该商品？");
+       if(rackItem==true){
+           $.ajax({
+               url:"/seller/rackBookByBookid",
+               type:"post",
+               data:{
+                   "bookid":bookid
+               },
+               success:function (data) {
+                   window.location.reload()
+               },
+               error:function (data) {
+                   alert("ajax--------rack")
+               }
+           })
+
+       }
+
+    }
+
+    /*
+    上架书籍
+    */
+    $('#addNewShop').click(function () {
+        $('#beforeContent').addClass('hidden');
+        $('#shelves').removeClass('hidden');
+    })
+
+
+    /*
+    * 修改商铺名称
+    *
+    */
+    $('#alterName').click(function () {
+        alert($('#shopidText').text())
+        var name=prompt("请输入要修改的商店名称")
+        $.ajax({
+            url:"/seller/updateShopnameByShopid",
+            data:{
+                "shopid":$('#shopidText').text(),
+                "shopname":name
+            },
+            type:"post",
+            success:function (data) {
+                $('#shopName').text(name);
+            },
+            error:function (data) {
+                alert("ajax----altername")
+            }
+        })
+
+    });
+
+
+
+
+    /*
+           * 对选中的标签激活active状态，对先前处于active状态但之后未被选中的标签取消active
+           * （实现左侧菜单中的标签点击后变色的效果）
+           */
+    $(document).ready(function () {
+        $('#menulist> a').click(function (e) {
+            //e.preventDefault();    加上这句则导航的<a>标签会失效
+            $('#menulist> a').removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+
+
+    function loadPage(url) {
+        $.get(url,function(data,status){
+            $("#right").html(data);
+        });
+    }
+</script>
+</html>>

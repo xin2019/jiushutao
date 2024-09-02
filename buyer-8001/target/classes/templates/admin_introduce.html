@@ -1,0 +1,916 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>8003端口管理员模块</title>
+    <!--<style type="text/css">-->
+        <!--/*-->
+<!--Design by Free CSS Templates-->
+<!--http://www.freecsstemplates.org-->
+<!--Released for free under a Creative Commons Attribution 2.5 License-->
+<!--*/-->
+
+        <!--body {-->
+            <!--margin: 0;-->
+            <!--padding: 0;-->
+            <!--background: #F7F7F7 url(/images/img01.jpg) repeat-x left top;-->
+            <!--/*font-family: Arial, Helvetica, sans-serif;*/-->
+            <!--font-size: 12px;-->
+            <!--color: #787878;-->
+        <!--}-->
+
+        <!--h1, h2, h3 {-->
+            <!--margin: 0;-->
+            <!--padding: 0;-->
+            <!--/*font-family: Georgia, "Times New Roman", Times, serif;*/-->
+            <!--font-weight: normal;-->
+            <!--color: #8A8A8A;-->
+        <!--}-->
+
+        <!--h1 {-->
+            <!--font-size: 2em;-->
+        <!--}-->
+
+        <!--h2 {-->
+            <!--font-size: 1.8em;-->
+        <!--}-->
+
+        <!--h3 {-->
+            <!--font-size: 1.6em;-->
+        <!--}-->
+
+        <!--p, ul, ol {-->
+            <!--margin-top: 0;-->
+            <!--line-height: 180%;-->
+        <!--}-->
+
+        <!--ul, ol {-->
+        <!--}-->
+
+        <!--a {-->
+            <!--text-decoration: none;-->
+            <!--color: #01BBEC;-->
+        <!--}-->
+
+        <!--a:hover {-->
+        <!--}-->
+
+        <!--#wrapper {-->
+            <!--width: 730px;-->
+            <!--margin: 0 auto;-->
+            <!--padding: 0;-->
+        <!--}-->
+
+        <!--/* Header */-->
+
+        <!--#header {-->
+            <!--width: 960px;-->
+            <!--height: 110px;-->
+            <!--margin: 0 auto;-->
+        <!--}-->
+
+        <!--/* Logo */-->
+
+        <!--#logo {-->
+            <!--float: left;-->
+            <!--height: 65px;-->
+            <!--margin: 0;-->
+            <!--padding-top: 20px;-->
+            <!--color: #FFFFFF;-->
+        <!--}-->
+
+        <!--#logo h1, #logo p {-->
+            <!--margin: 0;-->
+            <!--padding: 0;-->
+        <!--}-->
+
+        <!--#logo h1 {-->
+            <!--float: left;-->
+            <!--letter-spacing: -1px;-->
+            <!--text-transform: lowercase;-->
+            <!--font-size: 2.6em;-->
+        <!--}-->
+
+        <!--#logo p {-->
+            <!--float: left;-->
+            <!--margin: 0;-->
+            <!--padding: 12px 0 0 10px;-->
+            <!--font: normal 14px Georgia, "Times New Roman", Times, serif;-->
+            <!--font-style: italic;-->
+        <!--}-->
+
+        <!--#logo a {-->
+            <!--border: none;-->
+            <!--background: none;-->
+            <!--text-decoration: none;-->
+            <!--color: #FFFFFF;-->
+        <!--}-->
+
+        <!--/* Search */-->
+
+        <!--#search {-->
+            <!--float: right;-->
+            <!--width: 301px;-->
+            <!--height: 110px;-->
+            <!--padding: 0;-->
+            <!--background: url(images/img02.jpg) no-repeat left top;-->
+        <!--}-->
+
+        <!--#search form {-->
+            <!--height: 41px;-->
+            <!--margin: 0;-->
+            <!--padding: 10px 0 0 20px;-->
+        <!--}-->
+
+        <!--#search fieldset {-->
+            <!--margin: 0;-->
+            <!--padding: 0;-->
+            <!--border: none;-->
+        <!--}-->
+
+        <!--#search-text {-->
+            <!--width: 195px;-->
+            <!--padding: 4px 5px;-->
+            <!--border: 1px solid #DEDEDE;-->
+            <!--background: #FFFFFF;-->
+            <!--text-transform: lowercase;-->
+            <!--font: normal 11px Arial, Helvetica, sans-serif;-->
+            <!--color: #5D781D;-->
+        <!--}-->
+
+        <!--#search-submit {-->
+            <!--width: 50px;-->
+            <!--height: 25px;-->
+            <!--border: none;-->
+            <!--background: url(/images/img03.jpg) no-repeat left top;-->
+            <!--color: #FFFFFF;-->
+        <!--}-->
+
+        <!--/* Menu */-->
+
+        <!--#menu {-->
+            <!--width: 960px;-->
+            <!--height: 38px;-->
+            <!--margin: 0 auto;-->
+            <!--padding: 0;-->
+        <!--}-->
+
+        <!--#menu ul {-->
+            <!--margin: 0;-->
+            <!--padding: 0px 0px 0px 25px;-->
+            <!--list-style: none;-->
+            <!--line-height: normal;-->
+        <!--}-->
+
+        <!--#menu li {-->
+            <!--float: left;-->
+            <!--height: 38px;-->
+            <!--background: url(/images/img04.jpg) no-repeat right top;-->
+        <!--}-->
+
+        <!--#menu a {-->
+            <!--display: block;-->
+            <!--margin-right: 3px;-->
+            <!--padding: 10px 30px 7px 30px;-->
+            <!--text-decoration: none;-->
+            <!--font-family: Arial, Helvetica, sans-serif;-->
+            <!--font-size: 13px;-->
+            <!--font-weight: bold;-->
+            <!--color: #AFAFAF;-->
+            <!--border: none;-->
+        <!--}-->
+
+        <!--#menu a:hover, #menu .current_page_item a {-->
+        <!--}-->
+
+        <!--#menu .current_page_item a {-->
+            <!--padding-left: 0;-->
+        <!--}-->
+
+        <!--#menu a:hover {-->
+            <!--text-decoration: underline;-->
+        <!--}-->
+
+        <!--/* Page */-->
+
+        <!--#page {-->
+            <!--width: 730px;-->
+            <!--margin: 0 auto;-->
+            <!--padding: 0;-->
+        <!--}-->
+
+        <!--#page-bgtop {-->
+            <!--padding: 20px 25px;-->
+        <!--}-->
+
+        <!--#page-bgbtm {-->
+        <!--}-->
+
+        <!--/* Content */-->
+
+        <!--#content {-->
+            <!--float: right;-->
+            <!--width: 960px;-->
+            <!--padding: 0;-->
+        <!--}-->
+
+        <!--.post {-->
+            <!--margin-bottom: 25px;-->
+            <!--padding: 20px 0px;-->
+            <!--background: #FFFFFF;-->
+        <!--}-->
+
+        <!--.post-bgtop {-->
+        <!--}-->
+
+        <!--.post-bgbtm {-->
+        <!--}-->
+
+        <!--.post .title {-->
+            <!--height: 38px;-->
+            <!--margin-bottom: 10px;-->
+            <!--padding: 12px 0 0 20px;-->
+            <!--background: #01BBEC;-->
+            <!--letter-spacing: -.5px;-->
+            <!--color: #FFFFFF;-->
+        <!--}-->
+
+        <!--.post .title a {-->
+            <!--color: #FFFFFF;-->
+            <!--border: none;-->
+        <!--}-->
+
+        <!--.post .meta {-->
+            <!--padding-bottom: 5px;-->
+            <!--padding-left: 20px;-->
+            <!--text-align: left;-->
+            <!--/*font-family: Arial, Helvetica, sans-serif;*/-->
+            <!--font-size: 11px;-->
+            <!--font-style: italic;-->
+        <!--}-->
+
+        <!--.post .meta a {-->
+            <!--color: #01BBEC;-->
+        <!--}-->
+
+        <!--.post .entry {-->
+            <!--padding: 0px 20px 20px 20px;-->
+            <!--padding-bottom: 20px;-->
+            <!--text-align: justify;-->
+        <!--}-->
+
+        <!--.links {-->
+            <!--display: block;-->
+            <!--width: 100px;-->
+            <!--height: 20px;-->
+            <!--margin-top: 20px;-->
+            <!--background: url(/images/img05.jpg) no-repeat left top;-->
+            <!--text-align: center;-->
+            <!--text-transform: uppercase;-->
+            <!--font-size: 10px;-->
+            <!--color: #FFFFFF;-->
+        <!--}-->
+
+        <!--/* Sidebar */-->
+
+        <!--#sidebar {-->
+            <!--float: left;-->
+            <!--width: 175px;-->
+            <!--padding: 20px 0px 0px 0px;-->
+            <!--color: #787878;-->
+            <!--background: #FFFFFF;-->
+        <!--}-->
+
+        <!--#sidebar ul {-->
+            <!--margin: 0;-->
+            <!--padding: 0;-->
+            <!--list-style: none;-->
+        <!--}-->
+
+        <!--#sidebar li {-->
+            <!--margin: 0;-->
+            <!--padding: 0;-->
+        <!--}-->
+
+        <!--#sidebar li ul {-->
+            <!--margin: 0px 15px;-->
+            <!--padding-bottom: 30px;-->
+        <!--}-->
+
+        <!--#sidebar li li {-->
+            <!--line-height: 35px;-->
+            <!--border-bottom: 1px dashed black;-->
+            <!--padding-left: 10px;-->
+        <!--}-->
+
+        <!--#sidebar li li span {-->
+            <!--display: block;-->
+            <!--margin-top: -20px;-->
+            <!--padding: 0;-->
+            <!--font-size: 11px;-->
+            <!--font-style: italic;-->
+        <!--}-->
+
+        <!--#sidebar h2 {-->
+            <!--height: 38px;-->
+            <!--padding: 12px 0 0 20px;-->
+            <!--background: #01BBEC;-->
+            <!--letter-spacing: -.5px;-->
+            <!--color: #FFFFFF;-->
+        <!--}-->
+
+        <!--#sidebar p {-->
+            <!--margin: 0 0px;-->
+            <!--padding: 0px 20px 20px 20px;-->
+            <!--text-align: justify;-->
+        <!--}-->
+
+        <!--#sidebar a {-->
+            <!--border: none;-->
+            <!--/*color: #01BBEC;*/-->
+        <!--}-->
+
+        <!--#sidebar a:hover {-->
+            <!--text-decoration: underline;-->
+            <!--color: #8A8A8A;-->
+        <!--}-->
+
+        <!--/* Calendar */-->
+
+        <!--#calendar {-->
+        <!--}-->
+
+        <!--#calendar_wrap {-->
+            <!--padding: 20px;-->
+        <!--}-->
+
+        <!--#calendar table {-->
+            <!--width: 100%;-->
+        <!--}-->
+
+        <!--#calendar tbody td {-->
+            <!--text-align: center;-->
+        <!--}-->
+
+        <!--#calendar #next {-->
+            <!--text-align: right;-->
+        <!--}-->
+
+        <!--/* Footer */-->
+
+        <!--#footer {-->
+            <!--width: 960px;-->
+            <!--height: 50px;-->
+            <!--margin: 0 auto;-->
+            <!--padding: 0px 0 15px 0;-->
+            <!--border-top: 1px solid #DEDEDE;-->
+            <!--font-family: Arial, Helvetica, sans-serif;-->
+        <!--}-->
+
+        <!--#footer p {-->
+            <!--margin: 0;-->
+            <!--padding-top: 20px;-->
+            <!--line-height: normal;-->
+            <!--font-size: 9px;-->
+            <!--text-transform: uppercase;-->
+            <!--text-align: center;-->
+            <!--color: #A0A0A0;-->
+        <!--}-->
+
+        <!--#footer a {-->
+            <!--color: #8A8A8A;-->
+        <!--}-->
+    <!--</style>-->
+    <style type="text/css">
+        /*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #F7F7F7 url(/images/img01.jpg) repeat-x left top;
+            /*font-family: Arial, Helvetica, sans-serif;*/
+            font-size: 12px;
+            color: #787878;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            padding: 0;
+            /*font-family: Georgia, "Times New Roman", Times, serif;*/
+            font-weight: normal;
+            color: #8A8A8A;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.8em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+        }
+
+        p, ul, ol {
+            margin-top: 0;
+            line-height: 180%;
+        }
+
+        ul, ol {
+        }
+
+        a {
+            text-decoration: none;
+            color: #01BBEC;
+        }
+
+        a:hover {
+        }
+
+        #wrapper {
+            width: 960px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* Header */
+
+        #header {
+            width: 960px;
+            height: 110px;
+            margin: 0 auto;
+        }
+
+        /* Logo */
+
+        #logo {
+            float: left;
+            height: 65px;
+            margin: 0;
+            padding-top: 20px;
+            color: #FFFFFF;
+        }
+
+        #logo h1, #logo p {
+            margin: 0;
+            padding: 0;
+        }
+
+        #logo h1 {
+            float: left;
+            letter-spacing: -1px;
+            text-transform: lowercase;
+            font-size: 2.6em;
+        }
+
+        #logo p {
+            float: left;
+            margin: 0;
+            padding: 12px 0 0 10px;
+            font: normal 14px Georgia, "Times New Roman", Times, serif;
+            font-style: italic;
+        }
+
+        #logo a {
+            border: none;
+            background: none;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        /* Search */
+
+        #search {
+            float: right;
+            width: 301px;
+            height: 110px;
+            padding: 0;
+            background: url(images/img02.jpg) no-repeat left top;
+        }
+
+        #search form {
+            height: 41px;
+            margin: 0;
+            padding: 10px 0 0 20px;
+        }
+
+        #search fieldset {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        #search-text {
+            width: 195px;
+            padding: 4px 5px;
+            border: 1px solid #DEDEDE;
+            background: #FFFFFF;
+            text-transform: lowercase;
+            font: normal 11px Arial, Helvetica, sans-serif;
+            color: #5D781D;
+        }
+
+        #search-submit {
+            width: 50px;
+            height: 25px;
+            border: none;
+            background: url(/images/img03.jpg) no-repeat left top;
+            color: #FFFFFF;
+        }
+
+        /* Menu */
+
+        #menu {
+            width: 960px;
+            height: 38px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        #menu ul {
+            margin: 0;
+            padding: 0px 0px 0px 25px;
+            list-style: none;
+            line-height: normal;
+        }
+
+        #menu li {
+            float: left;
+            height: 38px;
+            background: url(/images/img04.jpg) no-repeat right top;
+        }
+
+        #menu a {
+            display: block;
+            margin-right: 3px;
+            padding: 10px 30px 7px 30px;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            color: #AFAFAF;
+            border: none;
+        }
+
+        #menu a:hover, #menu .current_page_item a {
+        }
+
+        #menu .current_page_item a {
+            padding-left: 0;
+        }
+
+        #menu a:hover {
+            text-decoration: underline;
+        }
+
+        /* Page */
+
+        #page {
+            width: 960px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        #page-bgtop {
+            padding: 20px 25px;
+        }
+
+        #page-bgbtm {
+        }
+
+        /* Content */
+
+        #content {
+            float: right;
+            width: 730px;
+            padding: 0;
+        }
+
+        .post {
+            margin-bottom: 25px;
+            padding: 20px 0px;
+            background: #FFFFFF;
+        }
+
+        .post-bgtop {
+        }
+
+        .post-bgbtm {
+        }
+
+        .post .title {
+            height: 38px;
+            margin-bottom: 10px;
+            padding: 12px 0 0 20px;
+            background: #01BBEC;
+            letter-spacing: -.5px;
+            color: #FFFFFF;
+        }
+
+        .post .title a {
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .post .meta {
+            padding-bottom: 5px;
+            padding-left: 20px;
+            text-align: left;
+            /*font-family: Arial, Helvetica, sans-serif;*/
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        .post .meta a {
+            color: #01BBEC;
+        }
+
+        .post .entry {
+            padding: 0px 20px 20px 20px;
+            padding-bottom: 20px;
+            text-align: justify;
+        }
+
+        .links {
+            display: block;
+            width: 100px;
+            height: 20px;
+            margin-top: 20px;
+            background: url(/images/img05.jpg) no-repeat left top;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 10px;
+            color: #FFFFFF;
+        }
+
+        /* Sidebar */
+
+        #sidebar {
+            float: left;
+            width: 175px;
+            padding: 20px 0px 0px 0px;
+            color: #787878;
+            background: #FFFFFF;
+        }
+
+        #sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #sidebar li {
+            margin: 0;
+            padding: 0;
+        }
+
+        #sidebar li ul {
+            margin: 0px 15px;
+            padding-bottom: 30px;
+        }
+
+        #sidebar li li {
+            line-height: 35px;
+            border-bottom: 1px dashed black;
+            padding-left: 10px;
+        }
+
+        #sidebar li li span {
+            display: block;
+            margin-top: -20px;
+            padding: 0;
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        #sidebar h2 {
+            height: 38px;
+            padding: 12px 0 0 20px;
+            background: #01BBEC;
+            letter-spacing: -.5px;
+            color: #FFFFFF;
+        }
+
+        #sidebar p {
+            margin: 0 0px;
+            padding: 0px 20px 20px 20px;
+            text-align: justify;
+        }
+
+        #sidebar a {
+            border: none;
+            /*color: #01BBEC;*/
+        }
+
+        #sidebar a:hover {
+            text-decoration: underline;
+            color: #8A8A8A;
+        }
+
+        /* Calendar */
+
+        #calendar {
+        }
+
+        #calendar_wrap {
+            padding: 20px;
+        }
+
+        #calendar table {
+            width: 100%;
+        }
+
+        #calendar tbody td {
+            text-align: center;
+        }
+
+        #calendar #next {
+            text-align: right;
+        }
+
+        /* Footer */
+
+        #footer {
+            width: 960px;
+            height: 50px;
+            margin: 0 auto;
+            padding: 0px 0 15px 0;
+            border-top: 1px solid #DEDEDE;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #footer p {
+            margin: 0;
+            padding-top: 20px;
+            line-height: normal;
+            font-size: 9px;
+            text-transform: uppercase;
+            text-align: center;
+            color: #A0A0A0;
+        }
+
+        #footer a {
+            color: #8A8A8A;
+        }
+    </style>
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script>
+        function clicklogin() {
+            document.getElementById("adminzhulanwei").setAttribute("hidden",true);
+            document.getElementById("adminjinpaishuwu").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushuji").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushangdian").setAttribute("hidden",true);
+            $('#adminloginSellerPage').removeAttr("hidden");
+        }
+        function clickshujitishen(){
+            document.getElementById("adminjinpaishuwu").setAttribute("hidden",true);
+            document.getElementById("adminloginSellerPage").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushuji").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushangdian").setAttribute("hidden",true);
+            $('#adminzhulanwei').removeAttr("hidden");
+            // $('#loginSellerPage').hidden=true;
+            // $('#shangjiaPage').removeAttr("hidden");
+            // $('#tishenpage').hidden=true;
+            // $('#shangchuanfengmian').hidden=true;
+            // $('#yifahuoshuji').hidden=true;
+            // $('#yigoumaishuji').hidden=true;
+        }
+        function clickshangdiantisheng (){
+            document.getElementById("adminloginSellerPage").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushuji").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushangdian").setAttribute("hidden",true);
+            document.getElementById("adminzhulanwei").setAttribute("hidden",true);
+            $('#adminjinpaishuwu').removeAttr("hidden");
+        }
+        function clickshujilanwei(){
+            document.getElementById("adminloginSellerPage").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushangdian").setAttribute("hidden",true);
+            document.getElementById("adminzhulanwei").setAttribute("hidden",true);
+            document.getElementById("adminjinpaishuwu").setAttribute("hidden",true);
+            $('#adminsuoyoushuji').removeAttr("hidden");
+        }
+        function clicksuoyoushangdian(){
+            document.getElementById("adminjinpaishuwu").setAttribute("hidden",true);
+            document.getElementById("adminloginSellerPage").setAttribute("hidden",true);
+            document.getElementById("adminsuoyoushuji").setAttribute("hidden",true);
+            document.getElementById("adminzhulanwei").setAttribute("hidden",true);
+            $('#adminsuoyoushangdian').removeAttr("hidden");
+        }
+
+    </script>
+</head>
+<body>
+<div id="wrapper"><a style="font-size: large" href="/">返回首页</a>
+    <div id="header">
+
+        <h2 style="margin-top:30px;margin-left:35px;color: black">
+
+            <a href="http://localhost:8003/" style="color: #00F7DE">点击跳转管理员登录</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color: red">测试账号：15712345678 &nbsp;&nbsp;&nbsp;&nbsp;   密码：1234chenxin</span>
+            <br/><br/>
+            如果访问失败，可能是由于服务器内存不足，该8003端口管理员模块无法上线，故暂以图片展示
+
+
+        </h2>
+
+    </div>
+
+
+
+    <!-- end #header -->
+
+    <!-- end #menu -->
+    <div id="page">
+        <div id="page-bgtop">
+            <div id="page-bgbtm">
+                <div id="content">
+                    <div class="post" id="adminloginSellerPage">
+                        <h3 class="title" style="text-align: center"><p>登录 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：使用cookie保存管理员信息，当未点击安全退出时，可继续访问原先页面</p>
+                        <!--<div class="entry">-->
+                        <img th:src="@{/upload/adminFolders/login.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+                    <div class="post " id="adminzhulanwei" hidden>
+                        <h3 class="title" style="text-align: center"><p>提升书籍栏位到 主栏位/好书推荐 栏位 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：通过卖家提供的书籍id，获取到概书籍信息，并将栏位提升到主栏位，或者好书栏位进行展示</p>
+                        <!--<div class="entry">-->
+                        <img th:src="@{/upload/adminFolders/indexpage.png}" style="width: 100%;">
+                        <br>
+                        <br>
+                        <img th:src="@{/upload/adminFolders/searchbook1.png}" style="width: 100%;">
+                        <br><br>
+                        <img th:src="@{/upload/adminFolders/searchbook2.png}" style="width: 100%;">
+                        <!--</div>-->
+                    </div>
+
+                    <div class="post " id="adminjinpaishuwu" hidden>
+                        <h3 class="title" style="text-align: center"><p>提升商店栏位到 金牌书屋 栏位 </p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：通过卖家提供的商铺id，查询该商店信息，进而将商店提升到金牌书屋栏位进行展示</p>
+                        <img th:src="@{/upload/adminFolders/shop1.png}" style="width: 100%;">
+                        <br>
+                        <br>
+                        <img th:src="@{/upload/adminFolders/shop2.png}" style="width: 100%;">
+                    </div>
+
+                    <div class="post " id="adminsuoyoushuji" hidden>
+                        <h3 class="title" style="text-align: center"><p>查看所有书籍栏位信息</p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：查看各个栏位书籍，可以提前下架栏位的某些书籍，一般主栏位书籍三天后自动换到普通栏位，可进行栏位续约或者提前移除该栏位,默认普通栏位是更多好书栏位</p>
+                        <img th:src="@{/upload/adminFolders/haoshu1.png}" style="width: 100%;">
+                        <br>
+                        <br>
+                        <img th:src="@{/upload/adminFolders/haoshu2.png}" style="width: 100%;">
+                    </div>
+
+                    <div class="post " id="adminsuoyoushangdian" hidden>
+                        <h3 class="title" style="text-align: center"><p>查看所有金牌栏位商店信息</p></h3>
+                        <p style="font-size: large;color: black;margin-left: 15px;">功能：查看正在展示在金牌栏位的商店信息，默认展示三天，可以进行续约继续展示在该栏位，也可提前移除在该栏位的商店</p>
+                        <img th:src="@{/upload/adminFolders/allshop.png}" style="width: 100%;">
+                    </div>
+
+
+
+                    <div style="clear: both;">&nbsp;</div>
+                </div>
+                <!-- end #content -->
+                <div id="sidebar">
+                    <ul>
+
+                        <li>
+                            <h2>管理员模块功能</h2>
+                            <ul>
+                                <li><h3><a href="javascript:void(0);" onclick="clicklogin()">登录界面</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="clickshujitishen()">对应书籍栏位提升</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="clickshangdiantisheng()">对应商店栏位提升</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="clickshujilanwei()">管理所有书籍栏位</a></h3></li>
+                                <li><h3><a href="javascript:void(0);" onclick="clicksuoyoushangdian()">管理所有商店栏位</a></h3></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- end #sidebar -->
+                <div style="clear: both;">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <!-- end #page -->
+</div>
+<div id="footer">
+    <div class="panel-title text-center " style="align:center;text-align:center;font-size: small"><a href="https://beian.miit.gov.cn" target="_blank">备案号：鄂ICP备2023006451-1号</a></div>
+
+</div>
+
+<!-- end #footer -->
+</body>
+</html>
+<span style="display:none;"></span>
+

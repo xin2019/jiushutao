@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<nav class="navbar navbar-default" th:fragment="top-nav">
+
+<p id="storageBuyerId"></p>
+
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header ">
+<!--记录buyer的登录状态-->
+                <p id="status" ></p>
+
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#moblie-dropdown" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <!--<div style="position:relative">-->
+                    <!--<input readonly="" type="text" data-toggle="city-picker" placeholder="请选择校区" data-level="city" size="35" class="city-picker-input"><span class="city-picker-span" style="width:240px;height:26px;line-height:25px;"><span class="placeholder">请选择校区</span><span class="title" style="display: none;"></span><div class="arrow"></div></span><div class="city-picker-dropdown" style="left:0px;top:100%;width:320px;"><div class="city-select-wrap"><div class="city-select-tab"><a class="active" data-count="province">省份</a><a data-count="city">学校</a></div><div class="city-select-content"><div class="city-select province" data-count="province" style="display: block;"><dl class="clearfix"><dt>A-G</dt><dd><a title="安徽省" data-code="340000" class="">安徽省</a><a title="北京市" data-code="110000" class="">北京市</a><a title="重庆市" data-code="500000" class="">重庆市</a><a title="福建省" data-code="350000" class="">福建省</a><a title="甘肃省" data-code="620000" class="">甘肃省</a><a title="广东省" data-code="440000" class="">广东省</a><a title="广西壮族自治区" data-code="450000" class="">广西壮族自治区</a><a title="贵州省" data-code="520000" class="">贵州省</a></dd></dl><dl class="clearfix"><dt>H-K</dt><dd><a title="海南省" data-code="460000" class="">海南省</a><a title="河北省" data-code="130000" class="">河北省</a><a title="黑龙江省" data-code="230000" class="">黑龙江省</a><a title="河南省" data-code="410000" class="">河南省</a><a title="湖北省" data-code="420000" class="">湖北省</a><a title="湖南省" data-code="430000" class="">湖南省</a><a title="江苏省" data-code="320000" class="">江苏省</a><a title="江西省" data-code="360000" class="">江西省</a><a title="吉林省" data-code="220000" class="">吉林省</a></dd></dl><dl class="clearfix"><dt>L-S</dt><dd><a title="辽宁省" data-code="210000" class="">辽宁省</a><a title="内蒙古自治区" data-code="150000" class="">内蒙古自治区</a><a title="宁夏回族自治区" data-code="640000" class="">宁夏回族自治区</a><a title="青海省" data-code="630000" class="">青海省</a><a title="山东省" data-code="370000" class="">山东省</a><a title="上海市" data-code="310000" class="">上海市</a><a title="山西省" data-code="140000" class="">山西省</a><a title="陕西省" data-code="610000" class="">陕西省</a><a title="四川省" data-code="510000" class="">四川省</a></dd></dl><dl class="clearfix"><dt>T-Z</dt><dd><a title="天津市" data-code="120000" class="">天津市</a><a title="新疆维吾尔自治区" data-code="650000" class="">新疆维吾尔自治区</a><a title="西藏自治区" data-code="540000" class="">西藏自治区</a><a title="云南省" data-code="530000" class="">云南省</a><a title="浙江省" data-code="330000" class="">浙江省</a></dd></dl></div><div class="city-select city" data-count="city" style="display: none;"><dl class="clearfix"><dd></dd></dl></div></div></div></div>-->
+                <!--</div>-->
+
+
+
+
+                <div style="position:relative">
+                    <!--该网站已被访问<span>(redis实现)</span>次-->
+                </div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="moblie-dropdown">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/">首页</a> </li>
+                    <!--<a href="account/github/login">Github 登录</a>-->
+
+                    <!--<a id="githubPanel"  href="/loginGithub">Github 登录&nbsp;&nbsp;&nbsp;<samll>第一次连接慢，若不行请按ctrl+f5后再试</samll></a>-->
+                    <a id="githubPanel" href="https://github.com/login/oauth/authorize?client_id=783f0312405613ecd0a7">Github 登录&nbsp;&nbsp;&nbsp;<samll>第一次连接慢，若不行请按ctrl+f5后再试</samll></a>
+                  <li><a id="navIndividual" >个人中心</a></li>
+                    <!--<li><a id="personal" href="#">个人中心</a></li>-->
+                    <!--<li><a href="#">卖家中心</a></li>-->
+                    <li><a id="navCart">购物车</a></li>
+
+                    <li id="encompassLoginSpan" class="dropdown"><a id="loginSpan" href="#myModal" class="dropdown-toggle" data-toggle="modal">登陆/注册</a>
+                        <!--登陆后-->
+
+                        <ul class="dropdown-menu">
+                            <li role="presentation"><a id="myOrderCommon">我的订单</a></li>
+                            <li role="presentation"><a id="navCart2">购物车</a></li>
+                            <!--<li role="presentation" id="personalSettingCommon">个人设置 </li>-->
+                            <li role="presentation"><a id="logout">退出登陆</a></li>
+                        </ul>
+                    </li>
+
+                    <!--登陆前-->
+                    <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                                    </button>
+                                    <h4 class="modal-title small text-center" id="myModalLabel">
+                                        <h3 style="color:blue;margin-left:100px;">旧书淘</h3>
+                                        <!--<label>快捷登陆</label>-->
+                                        <!--<div class="form-inline text-center">-->
+                                            <!--<a href="" style="margin-right: 20px;"><img src="/images/logos/weixin.png" th:src="@{/images/logos/weixin.png}"></a>-->
+                                            <!--<a href=""> <img src="/images/logos/weibo.png" th:src="@{/images/logos/weibo.png}"></a>-->
+                                        <!--</div>-->
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+
+
+                                    <!--<p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>-->
+                                    <!--<form id="login">-->
+<!--                                    20240902修改前版本      <form action="/buyer/loginBefore" id="login">-->
+                                    <form >
+                                        <p id="showMsg" style="color: red"></p>
+                                        <div class="form-group form-inline">
+                                            <label>手机号</label>&nbsp;&nbsp;
+                                            <input type="text" class="form-control" name="username">
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label>&nbsp;密&nbsp;&nbsp;码</label>&nbsp;&nbsp;
+                                            <input type="password" class="form-control" name="password">
+                                        </div>
+                                        <div class="form-inline text-center">
+                                            <a class="text-info small" href="#myModal1" data-toggle="modal" data-dismiss="modal">没有账号？</a>
+                                            <!--<a class="text-info small" href="javascript:" onclick="showValidate()">忘记密码？</a>-->
+                                        </div>
+
+                                    </form>
+
+                                    <form id="validate" hidden="">
+                                        <div class="form-group form-inline">
+                                            <label class=" form-control-static"> 电 话 </label>
+                                            <input type="text" class="form-control" style="width:170px;margin-left: 15px;">
+                                        </div>
+                                        <!--<div class="form-group form-inline">-->
+                                            <!--<label class=" form-control-static"> 验证码 </label>-->
+                                            <!--<input type="text" class="form-control " style="width: 120px;margin-left: 5px;">-->
+                                            <!--<button onclick="sendMES()" type="button" class="btn btn-info" style="width:50px;">发送</button>-->
+                                        <!--</div>-->
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="dismissBtn">
+                                        取消
+                                    </button>
+                                    <button type="button" class="btn btn-default hidden" id="returnBtn" onclick="returnLogin()">返回
+                                    </button>
+
+                                  <button type="button" class="btn btn-info" id="loginBtn">登陆</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--注册-->
+                    <!--<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">-->
+                        <!--<div class="modal-dialog" role="document">-->
+                            <!--<div class="modal-content" style="background-image: url('images/register_background.png');">-->
+                                <!--<div class="modal-header">-->
+                                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>-->
+                                    <!--<span class="small">已注册<a id="returnLogin" class="text-info">直接登录</a> </span>-->
+                                <!--</div>-->
+                                <!--<div class="modal-body" style="background:rgba(255,255,255,0.3);!important;">-->
+                                    <!--<form class="text-center" id="form1" action="/login/register">-->
+
+                                        <!--<div class="form-inline form-group row">-->
+                                            <!--<label class="form-control-static col-md-5">手机号/登录用户名</label>-->
+                                            <!--<input placeholder="登陆时使用" name="phone" type="text" class=" form-control col-md-7 " style="margin-left: -40px;">-->
+                                        <!--</div>-->
+                                        <!--<div class="form-inline form-group row">-->
+                                            <!--<label class="form-control-static col-md-5">姓名</label>-->
+                                            <!--<input placeholder="请输入真实姓名" name="name" type="text" class=" form-control col-md-7 " style="margin-left: -40px;">-->
+                                        <!--</div>-->
+                                        <!--<div class="form-inline form-group row">-->
+                                            <!--<label class="form-control-static col-md-5">密码</label>-->
+                                            <!--<input id="password1" type="password" placeholder="请输入密码" name="password"  class=" form-control col-md-7 " style="margin-left: -40px;">-->
+                                        <!--</div>-->
+                                        <!--<div class="form-inline form-group row">-->
+                                            <!--<label class="form-control-static col-md-5">确认密码</label>-->
+                                            <!--<input id="password2" type="password" name="repassword" placeholder="再次输入密码" class=" form-control col-md-7 " style="margin-left: -40px;">-->
+                                        <!--</div>-->
+                                        <!--<div class="form-inline form-group row">-->
+                                            <!--<label class="form-control-static col-md-5">收货地址</label>-->
+                                            <!--<input type="text" name="address" class=" form-control col-md-7 " style="margin-left: -40px;" placeholder="默认收货地址">-->
+                                        <!--</div>-->
+
+                                        <!--<div class="form-inline form-group row">-->
+                                            <!--<label class="form-control-static col-md-5">邮箱</label>-->
+                                            <!--<input type="tel" placeholder="请输入邮箱" name="email" class=" form-control col-md-7 " style="margin-left: -40px;">-->
+                                        <!--</div>-->
+                                       <!--<div class="form-inline form-group row">-->
+                                           <!--<label class="form-control-static col-md-5">请选择性别</label>-->
+                                           <!--<input type="radio" name="sex" class="pull-left" value="1" >&nbsp;&nbsp;&nbsp;&nbsp;<span class="pull-left">女</span>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                           <!--<input type="radio" class="pull-left" style="margin-left: 50px;" name="sex" value="0">&nbsp;&nbsp;&nbsp;&nbsp;<span class="pull-left">男</span>-->
+                                       <!--</div>-->
+                                        <!--&lt;!&ndash;<div class="form-inline form-group row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<label class="col-md-5 form-control-static">验证码</label>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div class="col-md-7" style="margin-left: -70px;">&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<input type="text" placeholder="暂未开通" class="pull-left form-control" style="width: 110px;">&ndash;&gt;-->
+                                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<div class="col-md-3">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<button type="button" class="btn btn-info " style="width:50px;margin-left:15px;text-align: justify">&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;发送&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--</form>-->
+
+
+                                <!--</div>-->
+                                <!--<div class="modal-footer">-->
+                                    <!--<input type="reset" value="返回" data-dismiss="modal" onclick="showLoginPanel()" class="btn btn-default">-->
+                                    <!--<button type="submit" class="btn btn-info" onclick="register()">注册</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+<div class="row " th:fragment="tao-nav">
+    <div class="col-md-8">
+        <img th:src="@{/images/brand_gaitubao_160x100.jpg}" src="/images/brand_gaitubao_160x100.jpg">
+        <img th:src="@{/images/subtitle.jpg}" src="/images/subtitle.jpg">
+    </div>
+
+    <form class="col-md-4 navbar-form search-align" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="输入想要购买的书名" id="searchName">
+            <span class="input-group-btn">
+                    <!--<button id="searchBook" class="btn btn-info" type="button">-->
+                    <button onclick="searchVersion2()" class="btn btn-info" type="button">
+                       搜索
+                    </button>
+                </span>
+        </div>
+        <div class="input-group" id="navCart3">
+            <button type="button" class="btn btn-default">
+               <span class="glyphicon glyphicon-shopping-cart">
+                   购物车
+               </span>
+            </button>
+        </div>
+    </form>
+
+</div>
+
+
+
+</html>

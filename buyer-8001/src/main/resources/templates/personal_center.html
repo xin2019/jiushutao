@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" href="/css/bootstrap.css">
+    <link rel="stylesheet" th:href="@{/css/tao.css}" href="/css/tao.css">
+    <link rel="stylesheet" th:href="@{/dist/css/city-picker.css}" href="/dist/css/city-picker.css">
+    <script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.js}" src="/js/bootstrap.js"></script>
+    <!--<script th:inline="javascript" th:src="@{/js/login/loginMain.js}" src="/js/login/loginMain.js"></script>-->
+<script>
+    function showPop(orderid) {
+        $('#'+orderid+'tdpopover').popover({
+            content: $('#'+orderid+'popoverBody').html()
+        });
+        $('#'+orderid+'tdpopover').popover('show');
+    }
+
+      function hidePop(orderid) {
+        $('#'+orderid+'tdpopover').popover('hide');
+    }
+
+
+    function showFailedOrders() {
+        console.log("进入失败订单")
+        $('#changeOrderShowPanel').addClass("hidden");
+        $('#cancelOrdersPanel').removeClass("hidden");
+        $('#finishedOrdersPanel').addClass("hidden");
+    }
+    //全部订单
+    function settlement() {
+
+        $('#changeOrderShowPanel').removeClass("hidden");
+        $('#cancelOrdersPanel').addClass("hidden");
+        $('#finishedOrdersPanel').addClass("hidden");
+
+    }
+
+
+function setting() {
+
+    var userID=null;
+    var bookID=null;
+    var userPhone=null;
+    var cookie=document.cookie;
+    var cookieArray=cookie.split(";");
+    for(var i=0;i<cookieArray.length;i++){
+        if(cookieArray[i].search("userID")!=-1){
+            userID=cookieArray[i].split("=")[1];
+        }
+        else if(cookieArray[i].search("bookID")!=-1){
+            bookID=cookieArray[i].split("=")[1];
+        }else if(cookieArray[i].search("userPhone")!=-1){
+            userPhone=cookieArray[i].split("=")[1];
+        }
+    }
+    // var urltt="/buyer/queryByBuyerName?name="+userID;
+    // console.log(urltt)
+    $.ajax({
+        url:"/buyer/personal/getBuyerByUserID?userID="+userID,
+        type: "get",
+        datatype:"json",
+        success:function (obj) {
+            // console.log(data);
+            // console.log(data.t_buyer_name);
+            $('#formalContentBeforeMain').addClass('hidden');
+            $('#personalSettingContent').removeClass('hidden');
+            $('#realName').val(obj.t_buyer_name);
+            $('#phone').val(obj.t_buyer_phone);
+            $('#email').val(obj.t_buyer_email);
+
+            var sex=obj.t_buyer_sex;
+            console.log("sex====="+sex)
+            if(sex==true){
+                console.log("进入了"+sex)
+                $('#gender-f').attr("checked");
+                $('#gender-m').removeAttr("checked");
+            }else{
+                console.log("进入了"+sex)
+                $('#gender-f').removeAttr("checked");
+                $('#gender-m').attr("checked")
+            }
+        },
+        error:function (data) {
+            console.log("gg-personalSetting")
+        }
+    })
+}
+
+
+</script>
+    <script th:inline="javascript" th:src="@{/js/login/loginMain.js}" src="/js/login/loginMain.js"></script>
+    <script>
+
+
+
+
+
+        //返回已完成订单
+
+        // $('#navSuccessedOrders').click(function () {
+        //     $('#changeOrderShowPanel').addClass("hidden");
+        //     $('#cancelOrdersPanel').addClass("hidden");
+        //     $('#finishedOrdersPanel').removeClass("hidden");
+        //
+        // })
+
+
+        // //返回支付失败订单
+        // $('#navCancelOrders').click(function () {
+        //
+        //
+        //     $('#changeOrderShowPanel').addClass("hidden");
+        //     $('#cancelOrdersPanel').removeClass("hidden");
+        //     $('#finishedOrdersPanel').addClass("hidden");
+        // })
+
+        /*
+        买家确认收货
+        */
+        function acceptOrder(orderid){
+            $.ajax({
+                url:"/updateStatusByBookid3?orderid="+orderid,
+                type:"get",
+                success:function (data) {
+                    if(data!=0){
+                        alert("确认收货成功")
+                        $('#queren').html("已确认收货")
+                        $('#'+orderid+'shouhuo').addClass('hidden')
+                        window.location.reload();
+                    }else{
+                        alert("收货失败")
+                    }
+                },
+                error:function (data) {
+                    alert("ajax---")
+                }
+            })
+        }
+
+        /*
+        querenshouhuo,acceptOrder
+        */
+
+        /*
+        删除收货地址
+        */
+        function delteaddress(addressid){
+            alert(addressid);
+            var userID=null;
+            var bookID=null;
+            var userPhone=null;
+            var cookie=document.cookie;
+            var cookieArray=cookie.split(";");
+            for(var i=0;i<cookieArray.length;i++){
+                if(cookieArray[i].search("userID")!=-1){
+                    userID=cookieArray[i].split("=")[1];
+                }
+                else if(cookieArray[i].search("bookID")!=-1){
+                    bookID=cookieArray[i].split("=")[1];
+                }else if(cookieArray[i].search("userPhone")!=-1){
+                    userPhone=cookieArray[i].split("=")[1];
+                }
+            }
+            $.ajax({
+                url:"/buyer/personal/deleteAddressByAddressID?addressid="+addressid,
+                type:"get",
+                success:function (data) {
+                    if(data!=0){
+                        alert("删除成功")
+                        $.ajax({
+                            url:"/buyer/personal/getAllAddress?buyerid="+userID,
+                            type:"get",
+                            success:function (data) {
+                                console.log(data);
+                                var contentDic="";
+
+                                for(var i=0;i<data.length;i++){
+                                    contentDic+="<tr><td>"+
+                                        data[i].t_address.t_address_name+"</td><td>"+
+                                        data[i].t_address.t_buyer_address+"</td>"+"<td>"+
+                                        data[i].t_address.t_address_phone+"</td>"+"<td><button class='btn btn-xs add-del btn-info' onclick='delteaddress("+data[i].t_address.t_address_id+")'>删除</button></td></tr>";
+                                }
+                                console.log(contentDic)
+                                $('#shouhuoContent22').html(contentDic);
+                            },
+                            error:function (data) {
+                                alert("ajax--渲染失败")
+
+                            }
+                        })
+                    }else{
+                        alert("删除失败")
+                    }
+
+                },
+                error:function (dta) {
+                    alert("ajax---删除")
+                }
+            })
+        }
+
+        /*
+               新增收货地址
+               */
+        function addnew(){
+            var userID=null;
+            var bookID=null;
+            var userPhone=null;
+            var cookie=document.cookie;
+            var cookieArray=cookie.split(";");
+            for(var i=0;i<cookieArray.length;i++){
+                if(cookieArray[i].search("userID")!=-1){
+                    userID=cookieArray[i].split("=")[1];
+                }
+                else if(cookieArray[i].search("bookID")!=-1){
+                    bookID=cookieArray[i].split("=")[1];
+                }else if(cookieArray[i].search("userPhone")!=-1){
+                    userPhone=cookieArray[i].split("=")[1];
+                }
+            }
+
+            // console.log("val==>",$('#buyerIDPTExt').val())
+            // console.log("text",$('#buyerIDPTExt').text())
+            console.log("text;;",userPhone)
+            // var buyerid=$('#buyerIDPTExt').text();
+            var buyerid=userID;
+
+            var confirmName=prompt("请输入收货人姓名");
+            var confirmVal=prompt("请输入地址");
+            var confirmPhone=prompt("请输入收货人电话");
+            if(confirmName&&confirmVal&&confirmPhone)
+                $.ajax({
+                    url:"/buyer/personal/addNewAddress?buyerid="+userID+"&address="+confirmVal+"&phone="+confirmPhone+"&name="+confirmName,
+                    type:"get",
+                    success:function (data) {
+
+                        if(data!=0){
+                            alert("添加成功")
+                            $.ajax({
+                                // url:"/buyer/personal/getAllAddress?buyerid="+$('#buyerIDPTExt').text(),
+                                url:"/buyer/personal/getAllAddress?buyerid="+userID,
+                                type:"get",
+                                success:function (data) {
+                                    console.log("/buyer/personal/getAllAddress?buyerid==>"+userID);
+                                    // console.log("/buyer/personal/getAllAddress?buyerid==>"+data);
+                                    var contentDic="";
+
+                                    for(var i=0;i<data.length;i++){
+                                        contentDic+="<tr><td>"+
+                                            data[i].t_address.t_address_name+"</td><td>"+
+                                            data[i].t_address.t_buyer_address+"</td>"+"<td>"+
+                                            data[i].t_address.t_address_phone+"</td>"+"<td><button class='btn btn-xs add-del btn-info' onclick='delteaddress("+data[i].t_address.t_address_id+")'>删除</button></td></tr>";
+                                    }
+                                    console.log(contentDic)
+                                    $('#shouhuoContent22').html(contentDic);
+                                },
+                                error:function (data) {
+                                    alert("ajax--渲染失败")
+
+                                }
+                            })
+
+
+
+                        }else{
+                            alert("添加失败，检查9001-addnewaddress")
+                        }
+                    }
+                    ,error:function (data) {
+                        alert("ajax----addressnew")
+                    }
+
+                })
+        }
+
+        /*
+        新增收货地址,废弃版本无响应
+        */
+        // $('#addnewAddress').click(function () {
+        //
+        //     var userID=null;
+        //     var bookID=null;
+        //     var userPhone=null;
+        //     var cookie=document.cookie;
+        //     var cookieArray=cookie.split(";");
+        //     for(var i=0;i<cookieArray.length;i++){
+        //         if(cookieArray[i].search("userID")!=-1){
+        //             userID=cookieArray[i].split("=")[1];
+        //         }
+        //         else if(cookieArray[i].search("bookID")!=-1){
+        //             bookID=cookieArray[i].split("=")[1];
+        //         }else if(cookieArray[i].search("userPhone")!=-1){
+        //             userPhone=cookieArray[i].split("=")[1];
+        //         }
+        //     }
+        //
+        //     console.log("val==>",$('#buyerIDPTExt').val())
+        //     console.log("text",$('#buyerIDPTExt').text())
+        //     var buyerid=$('#buyerIDPTExt').text();
+        //
+        //     var confirmName=prompt("请输入收货人姓名");
+        //     var confirmVal=prompt("请输入地址");
+        //     var confirmPhone=prompt("请输入收货人电话");
+        //     if(confirmName&&confirmVal&&confirmPhone)
+        //         $.ajax({
+        //             url:"/buyer/personal/addNewAddress?buyerid="+userID+"&address="+confirmVal+"&phone="+confirmPhone+"&name="+confirmName,
+        //             type:"get",
+        //             success:function (data) {
+        //
+        //                 if(data!=0){
+        //                     alert("添加成功")
+        //                     $.ajax({
+        //                         // url:"/buyer/personal/getAllAddress?buyerid="+$('#buyerIDPTExt').text(),
+        //                         url:"/buyer/personal/getAllAddress?buyerid="+userID,
+        //                         type:"get",
+        //                         success:function (data) {
+        //                             console.log(data);
+        //                             var contentDic="";
+        //
+        //                             for(var i=0;i<data.length;i++){
+        //                                 contentDic+="<tr><td>"+
+        //                                     data[i].t_address.t_address_name+"</td><td>"+
+        //                                     data[i].t_address.t_buyer_address+"</td>"+"<td>"+
+        //                                     data[i].t_address.t_address_phone+"</td>"+"<td><button class='btn btn-xs add-del btn-info' onclick='delteaddress("+data[i].t_address.t_address_id+")'>删除</button></td></tr>";
+        //                             }
+        //                             console.log(contentDic)
+        //                             $('#shouhuoContent22').html(contentDic);
+        //                         },
+        //                         error:function (data) {
+        //                             alert("ajax--渲染失败")
+        //
+        //                         }
+        //                     })
+        //
+        //
+        //
+        //                 }else{
+        //                     alert("添加失败，检查9001-addnewaddress")
+        //                 }
+        //             }
+        //             ,error:function (data) {
+        //                 alert("ajax----addressnew")
+        //             }
+        //
+        //         })
+        // })
+
+
+
+        /*
+        全选-购物车
+         */
+        $('#checkall').click(function () {
+            var flag=$(this).prop("checked");
+            if(flag){
+                $('.ckitem').prop("checked",true);
+            }else{
+                $('.ckitem').prop("checked",false);
+            }
+        })
+
+        /*
+        单选
+         */
+        $(".ckitem").click(function () {
+            // var cl=$('.ckitem').length;
+            var totalPrice=0;
+            var length=$('.ckitem:checked').length;
+            $('#selectCount').text(length)
+
+            // var t=$('#cartBody tr');
+
+            for(var i=0;i<length;i++){
+                var tr = $($(".cart-body tr")[i]);
+                var check=  tr.children(":eq(0)").children(".ckitem").prop("checked");
+                var countPrice= tr.children(":eq(5)").children("span").html();
+                console.log("countPrice==>"+countPrice);
+                countPrice=Number(countPrice)
+                // totalPrice+=countPrice;
+                if(check){
+                    totalPrice+=countPrice;
+                }
+            }
+            $('#selectTotal').text(totalPrice);
+
+        })
+
+
+        /*
+        订单界面的控制
+         */
+
+
+        // function showPopCancel(orderid) {
+        //     console.log("showpop");
+        //     $('#'+orderid+'tdpopoverCancel').popover({
+        //         content: $('#'+orderid+'popoverBodyCancel').html()
+        //     });
+        //     $('#'+orderid+'tdpopoverCancel').popover('show');
+        //
+        //
+        //
+        // }
+        //
+        // function hidePopCancel(orderid) { console.log("hidePop");
+        //     $('#'+orderid+'tdpopoverCancel').popover('hide');
+        // }
+
+
+        /*已经放在head中
+                showPop=  function (orderid) {
+                    $('#'+orderid+'tdpopover').popover({
+                        content: $('#'+orderid+'popoverBody').html()
+                    });
+                    $('#'+orderid+'tdpopover').popover('show');
+                }
+
+                hidePop=  function (orderid) {
+                    $('#'+orderid+'tdpopover').popover('hide');
+                }
+        */
+        // 购物车功能
+        function tt(index) {
+            alert(index)
+            $('#' + index + 'quantity').addClass("hidden");
+            $('#' + index + 'shuliang').removeClass("hidden");
+            $('#' + index + 'updateover').removeClass("hidden");
+            $('#' + index + 'shifujia').addClass("hidden")
+
+        }
+
+        function cancelOrder(index) {
+            console.log(index)
+            var isConfirm = confirm("确定删除该订单?");
+            if (isConfirm == true) {
+                $.ajax({
+                    url: "/buyer/personal/deleteOrderByOrderId?id=" + index,
+                    type: "get",
+                    jsontype: "json",
+                    success: function (data) {
+                        window.location.reload()
+                    },
+                    error: function (data) {
+                        alert("gg")
+                    }
+                })
+            }
+        }
+
+
+
+    </script>
+</head>
+<body class="container" >
+<h1 th:text="${loginUser}" id="buyerIDPTExt" class="hidden"></h1>
+<div th:insert="~{common/header::top-nav}"></div>
+<div class="container">
+    <div th:insert="~{common/header::tao-nav}"></div>
+</div>
+
+<div th:insert="~{common/search::searchDiv}"></div>
+
+<script>
+    var userID=null;
+    var bookID=null;
+    var userPhone=null;
+    var cookie=document.cookie;
+    var cookieArray=cookie.split(";");
+    for(var i=0;i<cookieArray.length;i++){
+        if(cookieArray[i].search("userID")!=-1){
+            userID=cookieArray[i].split("=")[1];
+        }
+        else if(cookieArray[i].search("bookID")!=-1){
+            bookID=cookieArray[i].split("=")[1];
+        }else if(cookieArray[i].search("userPhone")!=-1){
+            userPhone=cookieArray[i].split("=")[1];
+        }
+    }
+    if(userPhone!=null&&userPhone!=""&&userPhone!=undefined){
+
+        $("#githubPanel").addClass("hidden");
+
+        // alert("onload::userphone=>"+userPhone);
+
+        $("#loginSpan").removeAttr("href");
+        $("#loginSpan").removeAttr("data-toggle");
+        $("#myModal").modal('hide');
+
+        $("#loginSpan").html(userPhone + " 欢迎你!");
+
+        $("#loginSpan").addClass("dropdown-toggle");
+        $("#loginSpan").attr("data-toggle","dropdown");
+        $("#loginSpan").attr("data-target","#encompassLoginSpan")
+        $("#encompassLoginSpan").addClass("dropdown");
+    }
+</script>
+<div id="formalContent">
+    <div class="panel-body container">
+        <div class="content">
+            <div class="panel panel-body">
+                <h4>
+                    <ul class="nav nav-pills" id="PersonalOrderNav">
+                        <li class="active"><a href="javascript:void(0)"id="myOrder">我  的  订  单</a></li>
+                        <li id="personalSetting"><a href="javascript:void(0)" onclick="setting()">个  人  设  置</a></li>
+                        <li id="navCart4"><a href="javascript:void(0)">购&nbsp;&nbsp;&nbsp;物&nbsp;&nbsp;&nbsp;车</a></li>
+                    </ul>
+                </h4>
+
+            </div>
+
+            <!--购物车界面-->
+            <!--<b>-->
+            <!--hree::-->
+            <!--</b>-->
+            <!--<p th:text="${books}"></p>-->
+            <!--<hr>-->
+
+            <!--<table>-->
+            <!--<tbody>-->
+            <!--<tr th:each="boo:${books}" >-->
+
+            <!--<td th:text="${boo.getT_book_id()}">年龄</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--</table>-->
+
+            <div class="hidden" id="showCart">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <p class="panel-title"><span class="fa fa-shopping-cart"></span> 购物车</p>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+
+                            <!--购物车表格开始-->
+                            <table class="cart-table" width="100%">
+                                <thead>
+                                <tr>
+                                    <th width="8%">
+                                        <input type="checkbox" class="ckall" id="checkall" />全选</th>
+                                    <th width="110"></th>
+                                    <th width="29%">商品</th>
+                                    <th width="11%">单价</th>
+                                    <th width="15%">数量</th>
+                                    <th width="11%">金额</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="cartBody" class="cart-body">
+                                <!--<tr th:each="book:${allOrder}">-->
+                                <tr th:each="book:${books}">
+                                    <td>
+                                        <input name="check" type="checkbox" class="ckitem" />
+                                    </td>
+                                    <td><img th:src="@{${book.getT_book().getT_book_photo()}+'/1.jpg'}" style="width:111px;height: 154px;" class="img-responsive" /></td>
+                                    <!--<td><img th:src="@{${book.getT_book_photo()}+'1.jpg'}" style="width:111px;height: 154px;" class="img-responsive" /></td>-->
+                                    <td th:text="${book.getT_book().getT_book_name()}"></td>
+                                    <!--<td th:text="${book.getT_book_name()}"></td>-->
+                                    <td>¥<span th:text="${book.getT_book().getT_book_now_price()}"></span></td>
+                                    <!--<td>¥<span th:text="${book.getT_book_now_price()}"></span></td>-->
+                                    <!--<td th:text="${book.getQuantity()}">-->
+                                    <td th:text="${book.getT_order().getT_bookid_quantity()}">
+                                    </td>
+                                    <!--<td>￥<span th:text="${book.getTotalPrice()}"></span></td>-->
+                                    <td>￥<span th:text="${book.getOriginTotalPrice()}"></span></td>
+                                    <td>
+                                        <input th:onclick="deleteBook([[${book.getT_book().getT_book_id()}]])" type="button" class="cart-del btn btn-default btn-xs" value="删除" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="total-bar">
+                                <a  class="cart-del-sel btn btn-default btn-xs">删除所选商品</a>
+                                <span class="pull-right">已选商品
+								<span id="selectCount" text="0"></span>件 总价
+								<span id="selectTotal" text="0"></span>元
+								</span>
+                            </div>
+                            <div>
+								<span class="pull-right">
+								<input  type="button" value="  结  算  " class="btn btn-primary btn-lg link-account" />
+							</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!--个人设置界面-->
+            <div id="personalSettingContent" class="hidden">
+                <div class="container">
+                    <div class="col-md-2">
+                        <!--左侧导航开始-->
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <!--<div class="panel-heading">-->
+                                <!--&lt;!&ndash;主选项：我的订单&ndash;&gt;-->
+                                <!--<p class="panel-title">-->
+                                <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">我的订单</a>-->
+                                <!--</p>-->
+                                <!--</div>-->
+                                <!--<div id="collapseOne" class="panel-collapse collapse">-->
+                                <!--<div class="panel-body">-->
+                                <!--<div><a href="orders.html">全部订单</a></div>-->
+                                <!--<div><a href="orders.html">待付款</a></div>-->
+                                <!--<div><a href="orders.html">待收货</a></div>-->
+                                <!--<div><a href="orders.html">待评价</a></div>-->
+                                <!--<div><a href="orders.html">退货退款</a></div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                            <div></div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <!--主选项：资料修改-->
+                                    <p class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">资料修改</a>
+                                    </p>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <div><a id="changePassLeft">修改密码</a></div>
+                                        <!--<div><a id="personalInfoLeft"><b>个人资料</b></a></div>-->
+                                        <!--<div><a id="uploadImageLeft">上传头像</a></div>-->
+                                        <div><a id="changeAddressLeft">收货管理</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--左侧导航结束-->
+                    </div>
+                    <div class="col-md-10 ">
+                        <div class="panel panel-default">
+                            <ul id="centerNav" class="nav nav-tabs">
+                                <li class="active" ><a id="personalInfo">个人资料</a></li>
+                                <li ><a id="changePass">修改密码</a></li>
+                                <!--<li ><a id="uploadImage">上传头像</a></li>-->
+                                <li ><a id="changeAddress">收货管理</a></li>
+                            </ul>
+
+                            <!--个人资料-->
+                            <div class="panel-body " id="personalInfoContent">
+                                <!--修改资料表单开始-->
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="col-md-2  control-label">用户名：</label>
+                                        <div class="col-md-8">
+                                            <input id="realName" name="name" type="text"  class="form-control" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label ">电话号码：</label>
+                                        <div class="col-md-8">
+                                            <input id="phone" name="phone" readonly="readonly" class="form-control" placeholder="请输入电话号码">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">电子邮箱：</label>
+                                        <div class="col-md-8">
+                                            <input id="email" name="email" type="email" class="form-control" placeholder="请输入电子邮箱">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">性别：</label>
+                                        <div class="col-md-8" >
+                                            <label class="radio-inline" >
+                                                <input id="gender-m" type="radio" th:checked="${buyer.isT_buyer_sex() eq false}" name="sex" value="false" disabled>男
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input id="gender-f"  type="radio" name="sex" th:checked="${buyer.isT_buyer_sex() eq true}" value="true" disabled>女
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <input id="btnSubmitPersonalInfo" type="button" class="btn btn-primary" value="修改" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                            <!--修改密码-->
+                            <div class="panel-body hidden" id="changePassContent">
+                                <!--修改密码表单开始-->
+                                <form class="form-horizontal" role="form" id="changePassForm">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">原密码：</label>
+                                        <div class="col-md-8">
+                                            <input id="oldPwd" type="password" class="form-control" placeholder="请输入原密码">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">新密码：</label>
+                                        <div class="col-md-8">
+                                            <input id="newPwd" type="password" class="form-control" placeholder="请输入新密码">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">确认密码：</label>
+                                        <div class="col-md-8">
+                                            <input id="rePwd" type="password" class="form-control" placeholder="请再次输入新密码">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <input id="btnSubmitChangePass" type="button" class="btn btn-primary" value="修改" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                            <!--上传头像-->
+                            <div class="panel-body hidden" id="uploadImageContent" >
+                                <!--上传头像表单开始-->
+                                <form id="form-change-avatar" class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">选择头像:</label>
+                                        <div class="col-md-2">
+                                            <img id="img-avatar" th:src="@{/images/2.png}" class="img-responsive" />
+                                            <small>暂未开通</small>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="col-md-offset-2 col-md-4">
+                                            <input name="file" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <input id="btnSubmitUploadImage" type="button" class="btn btn-primary" value="上传" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!--修改地址-->
+                            <div class="panel-body hidden" id="changeAddressContent">
+                                <!--地址显示-->
+                                <table class="table table-striped">
+                                    <caption>收货地址列表</caption>
+                                    <thead>
+                                    <tr>
+                                        <th>收货人姓名</th>
+                                        <th>详细地址</th>
+                                        <th>联系电话</th>
+                                        <th colspan="3">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="shouhuoContent22">
+                                    </tbody>
+                                </table>
+                    <!--已废弃            &lt;!&ndash;<a id="addnewAddress" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span>新增收货地址</a>&ndash;&gt;-->
+                                <a onclick="addnew()" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span>新增收货地址</a>
+                                <a id="updateAddressOver" class="hidden btn btn-sm btn-primary"><span class="fa fa-plus"></span>提交修改</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body"  id="formalContentBeforeMain">
+
+                <div style="margin-bottom: 30px;" class="nav justify-content-center">
+                    <ul class="nav nav-tabs justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="navAllOrders" href="javascript:void(0)" onclick="settlement()">全部订单</a>
+                        </li>
+
+                        <li class="nav-item">
+                     <!--废弃版本       &lt;!&ndash;<a class="nav-link" id="navCancelOrders" href="javascript:void(0)">支付失败订单</a>&ndash;&gt;-->
+                            <a class="nav-link" id="navCancelOrders" onclick="showFailedOrders()">支付失败订单</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--显示全部订单-->
+                <div id="changeOrderShowPanel">
+                    <div class="panel panel-info" th:each="order:${allOrder}"  >
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span th:text="${#dates.format(order.getT_order().getT_order_date(),'yyyy-MM-dd')}"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  订单编号：<span th:text="${order.getT_order().getT_order_id()}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;店铺：&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${order.getShopName()}"></span>
+                                <!--<a class=" pull-right" style="margin-right: 15px;" th:onclick="tt([[${order.getT_order().getT_order_id()}]])">修改订单</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+
+                                <div th:switch="${order.getT_order().getT_book_status()}">
+
+                                    <div id="queren" > 订单状态：
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '5'">已付款，等待发货</span>
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '2'">卖家已发货</span>
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '3'">已经确认收货</span>
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '4'">订单已取消</span>
+                                        <!--<span th:case='1'>已付款</span>-->
+                                        <!--<span th:case='2'>卖家已发货</span>-->
+                                        <!--<span th:case='3'>已经确认收货</span>-->
+                                    </div>
+                                </div>
+                                <!--<a class=" pull-right" style="margin-left: 15px; margin-right: 20px" th:onclick="cancelOrder([[${order.getT_order().getT_order_id()}]])">取消订单</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                <a th:if="${order.getT_book().getT_book_status()} eq '2'" th:id="${order.getT_order().getT_order_id()}+'shouhuo'" class=" pull-right" style="margin-left: 15px; margin-right: 20px" th:onclick="acceptOrder([[${order.getT_order().getT_order_id()}]])">确认收货</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <!--<a class="pull-right" th:id="${order.getT_order().getT_order_id()}+orderdetail">订单详情</a>-->
+
+
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+
+
+
+
+
+                            <!--<p class="hidden" id="buyerIDPTExt" th:text="${loginUser}"></p>-->
+
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th  width="15%"  style="text-align: center;"></th>
+                                    <th width="35%"  style="text-align: center;">商品</th>
+                                    <th width="15%"  style="text-align: center;">单价</th>
+                                    <th width="15%"  style="text-align: center;">数量</th>
+                                    <th width="20%"  style="text-align: center;">原价</th>
+                                </tr>
+                                </thead>
+                                <tbody style="text-align: center; border-radius: 2%">
+                                <tr>
+
+
+                                    <td th:id="${order.getT_order().getT_order_id()}+'tdpopover'" th:onmouseout="hidePop([[${order.getT_order().getT_order_id()}]])"  th:title="${order.getT_book().getT_book_name()}" data-toggle="popover" th:onmouseover="showPop([[${order.getT_order().getT_order_id()}]])" data-placement="right" data-html="true"   >
+                                        <img id="bookImage"  th:src="@{${order.getT_book().getT_book_photo()+'/1.jpg'}}"
+                                             class="img-responsive" style="width: 132px;height: 76px;border-radius: 2%;">
+
+
+                                        <div class="hidden">
+                                            <div class="panel-body" th:id="${order.getT_order().getT_order_id()}+'popoverBody'">
+                                                <h3>商品详细信息</h3><hr>
+                                                <h4 class="row" th:text="'订单编号：'+${order.getT_order().getT_order_id()}"></h4>
+                                                <table>
+                                                    <tr>
+                                                        <th  width="15%"  style="text-align: center;"></th>
+                                                        <th width="35%"  style="text-align: center;">商品</th>
+                                                        <th width="15%"  style="text-align: center;">单价</th>
+                                                        <th width="15%"  style="text-align: center;">数量</th>
+                                                        <th width="20%"  style="text-align: center;">出版社</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align: center;"><img th:src="@{${order.getT_book().getT_book_photo()+'/1.jpg'}}"
+                                                                                             class="img-responsive" style="border-radius: 2%;">
+                                                        </td>
+                                                        <td style="text-align: center;" th:text="${order.getT_book().getT_book_name()}"></td>
+                                                        <td style="text-align: center;">¥<span th:text="${order.getT_book().getT_book_now_price()}"></span></td>
+                                                        <td style="text-align: center;" th:id="${order.getT_order().getT_order_id()+'quantity'}" th:text="${order.getT_order().getT_bookid_quantity()+'件'}"></td>
+                                                        <td style="text-align: center;">¥<span th:text="${order.getT_book().getT_book_press()}"></span></td>
+                                                    </tr>
+                                                </table>
+                                                <hr>
+                                                <h4 th:text="'实付价格：'+${order.getT_order().getT_total_price()}"></h4>
+                                                <hr>
+                                                <h4 th:text="'下单日期：'+${#dates.format(order.getT_order().getT_order_date(),'yyyy-MM-dd')}"></h4>
+                                                <hr>
+                                                <h3>收货人信息</h3><hr>
+                                                <h4 th:text="'收货人姓名：'+${order.getT_address().getT_address_name()}"></h4>
+                                                <h4 th:text="'收货人电话：'+${order.getT_address().getT_address_phone()}"></h4>
+                                                <h4 th:text="'收货人地址：'+${order.getT_address().getT_buyer_address()}"></h4>
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <td th:text="${order.getT_book().getT_book_name()}"></td>
+                                    <td>¥<span th:text="${order.getT_book().getT_book_now_price()}"></span></td>
+                                    <td th:id="${order.getT_order().getT_order_id()+'quantity'}" th:text="${order.getT_order().getT_bookid_quantity()+'件'}"></td>
+                                    <td class="hidden" th:id="${order.getT_order().getT_order_id()}+'shuliang'"></td>
+                                    <td>¥<span th:text="${order.getOriginTotalPrice()}"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div>
+                                <span th:id="${order.getT_order().getT_order_id()}+'shifujia'" class="pull-right" style="margin: 15px auto;font-size: 20px;color: red; font-weight: bolder" th:text="'实付价：¥'+${#numbers.formatDecimal(order.getT_order().getT_total_price(),1,'COMMA',2,'POINT')}"></span>
+                                <button class="btn btn-info hidden pull-right" th:id="${order.getT_order().getT_order_id()}+'updateover'">修改完成</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--显示已取消订单-->
+                <div id="cancelOrdersPanel" class="hidden">
+                    <div class="panel panel-info" th:each="order:${canceledOrders}"  >
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span th:text="${#dates.format(order.getT_order().getT_order_date(),'yyyy-MM-dd')}"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  订单编号：<span th:text="${order.getT_order().getT_order_id()}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;店铺：&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${order.getShopName()}"></span>
+                                <!--<a class=" pull-right" style="margin-right: 15px;" th:onclick="tt([[${order.getT_order().getT_order_id()}]])">修改订单</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+
+                                <div th:switch="${order.getT_order().getT_book_status()}">
+
+                                    <div  id="queren" >订单状态：
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '5'">已付款，等待发货</span>
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '2'">卖家已发货</span>
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '3'">已经确认收货</span>
+                                        <span th:if="${order.getT_book().getT_book_status()} eq '4'">订单已取消</span>
+                                        <!--<span th:case='1'>已付款</span>-->
+                                        <!--<span th:case='2'>卖家已发货</span>-->
+                                        <!--<span th:case='3'>已经确认收货</span>-->
+                                    </div>
+                                </div>
+                                <!--<a class=" pull-right" style="margin-left: 15px; margin-right: 20px" th:onclick="cancelOrder([[${order.getT_order().getT_order_id()}]])">取消订单</a>&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                <a th:if="${order.getT_book().getT_book_status()} eq '2'" th:id="${order.getT_order().getT_order_id()}+'shouhuo'" class=" pull-right" style="margin-left: 15px; margin-right: 20px" th:onclick="acceptOrder([[${order.getT_order().getT_order_id()}]])">确认收货</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <!--<a class="pull-right" th:id="${order.getT_order().getT_order_id()}+orderdetail">订单详情</a>-->
+
+
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+
+
+
+
+
+                            <!--<p class="hidden" id="buyerIDPTExt" th:text="${loginUser}"></p>-->
+
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th  width="15%"  style="text-align: center;"></th>
+                                    <th width="35%"  style="text-align: center;">商品</th>
+                                    <th width="15%"  style="text-align: center;">单价</th>
+                                    <th width="15%"  style="text-align: center;">数量</th>
+                                    <th width="20%"  style="text-align: center;">原价</th>
+                                </tr>
+                                </thead>
+                                <tbody style="text-align: center; border-radius: 2%">
+                                <tr>
+
+
+                                    <td th:id="${order.getT_order().getT_order_id()}+'tdpopover'" th:onmouseout="hidePopCancel([[${order.getT_order().getT_order_id()}]])"  th:title="${order.getT_book().getT_book_name()}" data-toggle="popover" th:onmouseover="showPopCancel([[${order.getT_order().getT_order_id()}]])" data-placement="right" data-html="true"   >
+                                        <img  th:src="@{${order.getT_book().getT_book_photo()+'/1.jpg'}}"
+                                             class="img-responsive" style="width: 132px;height: 76px;border-radius: 2%;">
+
+
+                                        <div class="hidden">
+                                            <div class="panel-body" th:id="${order.getT_order().getT_order_id()}+'popoverBody'">
+                                                <h3>商品详细信息</h3><hr>
+                                                <h4 class="row" th:text="'订单编号：'+${order.getT_order().getT_order_id()}"></h4>
+                                                <table>
+                                                    <tr>
+                                                        <th  width="15%"  style="text-align: center;"></th>
+                                                        <th width="35%"  style="text-align: center;">商品</th>
+                                                        <th width="15%"  style="text-align: center;">单价</th>
+                                                        <th width="15%"  style="text-align: center;">数量</th>
+                                                        <th width="20%"  style="text-align: center;">出版社</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align: center;"><img th:src="@{${order.getT_book().getT_book_photo()+'/1.jpg'}}"
+                                                                                             class="img-responsive" style="border-radius: 2%;">
+                                                        </td>
+                                                        <td style="text-align: center;" th:text="${order.getT_book().getT_book_name()}"></td>
+                                                        <td style="text-align: center;">¥<span th:text="${order.getT_book().getT_book_now_price()}"></span></td>
+                                                        <td style="text-align: center;" th:id="${order.getT_order().getT_order_id()+'quantity'}" th:text="${order.getT_order().getT_bookid_quantity()+'件'}"></td>
+                                                        <td style="text-align: center;">¥<span th:text="${order.getT_book().getT_book_press()}"></span></td>
+                                                    </tr>
+                                                </table>
+                                                <hr>
+                                                <h4 th:text="'实付价格：'+${order.getT_order().getT_total_price()}"></h4>
+                                                <hr>
+                                                <h4 th:text="'下单日期：'+${#dates.format(order.getT_order().getT_order_date(),'yyyy-MM-dd')}"></h4>
+                                                <hr>
+                                                <h3>收货人信息</h3><hr>
+                                                <h4 th:text="'收货人姓名：'+${order.getT_address().getT_address_name()}"></h4>
+                                                <h4 th:text="'收货人电话：'+${order.getT_address().getT_address_phone()}"></h4>
+                                                <h4 th:text="'收货人地址：'+${order.getT_address().getT_buyer_address()}"></h4>
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <td th:text="${order.getT_book().getT_book_name()}"></td>
+                                    <td>¥<span th:text="${order.getT_book().getT_book_now_price()}"></span></td>
+                                    <td th:id="${order.getT_order().getT_order_id()+'quantity'}" th:text="${order.getT_order().getT_bookid_quantity()+'件'}"></td>
+                                    <td class="hidden" th:id="${order.getT_order().getT_order_id()}+'shuliang'"></td>
+                                    <td>¥<span th:text="${order.getOriginTotalPrice()}"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div>
+                                <span th:id="${order.getT_order().getT_order_id()}+'shifujia'" class="pull-right" style="margin: 15px auto;font-size: 20px;color: red; font-weight: bolder" th:text="'实付价：¥'+${#numbers.formatDecimal(order.getT_order().getT_total_price(),1,'COMMA',2,'POINT')}"></span>
+                                <button class="btn btn-info hidden pull-right" th:id="${order.getT_order().getT_order_id()}+'updateover'">修改完成</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{common/footer::foot}"></div>
+
+    <script th:inline="javascript" th:src="@{/js/login/loginMain.js}" src="/js/login/loginMain.js"></script>
+    <script>
+
+
+
+
+
+        //返回已完成订单
+
+        // $('#navSuccessedOrders').click(function () {
+        //     $('#changeOrderShowPanel').addClass("hidden");
+        //     $('#cancelOrdersPanel').addClass("hidden");
+        //     $('#finishedOrdersPanel').removeClass("hidden");
+        //
+        // })
+
+
+        // //返回支付失败订单
+        // $('#navCancelOrders').click(function () {
+        //
+        //
+        //     $('#changeOrderShowPanel').addClass("hidden");
+        //     $('#cancelOrdersPanel').removeClass("hidden");
+        //     $('#finishedOrdersPanel').addClass("hidden");
+        // })
+
+        /*
+        买家确认收货
+        */
+        function acceptOrder(orderid){
+            $.ajax({
+                url:"/updateStatusByBookid3?orderid="+orderid,
+                type:"get",
+                success:function (data) {
+                    if(data!=0){
+                        alert("确认收货成功")
+                        $('#queren').html("已确认收货")
+                        $('#'+orderid+'shouhuo').addClass('hidden')
+                        window.location.reload();
+                    }else{
+                        alert("收货失败")
+                    }
+                },
+                error:function (data) {
+                    alert("ajax---")
+                }
+            })
+        }
+
+        /*
+        querenshouhuo,acceptOrder
+        */
+
+        /*
+        删除收货地址
+        */
+        function delteaddress(addressid){
+            alert(addressid);
+            var userID=null;
+            var bookID=null;
+            var userPhone=null;
+            var cookie=document.cookie;
+            var cookieArray=cookie.split(";");
+            for(var i=0;i<cookieArray.length;i++){
+                if(cookieArray[i].search("userID")!=-1){
+                    userID=cookieArray[i].split("=")[1];
+                }
+                else if(cookieArray[i].search("bookID")!=-1){
+                    bookID=cookieArray[i].split("=")[1];
+                }else if(cookieArray[i].search("userPhone")!=-1){
+                    userPhone=cookieArray[i].split("=")[1];
+                }
+            }
+            $.ajax({
+                url:"/buyer/personal/deleteAddressByAddressID?addressid="+addressid,
+                type:"get",
+                success:function (data) {
+                    if(data!=0){
+                        alert("删除成功")
+                        $.ajax({
+                            url:"/buyer/personal/getAllAddress?buyerid="+userID,
+                            type:"get",
+                            success:function (data) {
+                                console.log(data);
+                                var contentDic="";
+
+                                for(var i=0;i<data.length;i++){
+                                    contentDic+="<tr><td>"+
+                                        data[i].t_address.t_address_name+"</td><td>"+
+                                        data[i].t_address.t_buyer_address+"</td>"+"<td>"+
+                                        data[i].t_address.t_address_phone+"</td>"+"<td><button class='btn btn-xs add-del btn-info' onclick='delteaddress("+data[i].t_address.t_address_id+")'>删除</button></td></tr>";
+                                }
+                                console.log(contentDic)
+                                $('#shouhuoContent22').html(contentDic);
+                            },
+                            error:function (data) {
+                                alert("ajax--渲染失败")
+
+                            }
+                        })
+                    }else{
+                        alert("删除失败")
+                    }
+
+                },
+                error:function (dta) {
+                    alert("ajax---删除")
+                }
+            })
+        }
+
+        /*
+        新增收货地址
+        */
+        $('#addnewAddress').click(function () {
+
+
+            var userID=null;
+            var bookID=null;
+            var userPhone=null;
+            var cookie=document.cookie;
+            var cookieArray=cookie.split(";");
+            for(var i=0;i<cookieArray.length;i++){
+                if(cookieArray[i].search("userID")!=-1){
+                    userID=cookieArray[i].split("=")[1];
+                }
+                else if(cookieArray[i].search("bookID")!=-1){
+                    bookID=cookieArray[i].split("=")[1];
+                }else if(cookieArray[i].search("userPhone")!=-1){
+                    userPhone=cookieArray[i].split("=")[1];
+                }
+            }
+
+            console.log("val==>",$('#buyerIDPTExt').val())
+            console.log("text",$('#buyerIDPTExt').text())
+            var buyerid=$('#buyerIDPTExt').text();
+
+            var confirmName=prompt("请输入收货人姓名");
+            var confirmVal=prompt("请输入地址");
+            var confirmPhone=prompt("请输入收货人电话");
+            if(confirmName&&confirmVal&&confirmPhone)
+                $.ajax({
+                    url:"/buyer/personal/addNewAddress?buyerid="+userID+"&address="+confirmVal+"&phone="+confirmPhone+"&name="+confirmName,
+                    type:"get",
+                    success:function (data) {
+
+                        if(data!=0){
+                            alert("添加成功")
+                            $.ajax({
+                                // url:"/buyer/personal/getAllAddress?buyerid="+$('#buyerIDPTExt').text(),
+                                url:"/buyer/personal/getAllAddress?buyerid="+userID,
+                                type:"get",
+                                success:function (data) {
+                                    console.log(data);
+                                    var contentDic="";
+
+                                    for(var i=0;i<data.length;i++){
+                                        contentDic+="<tr><td>"+
+                                            data[i].t_address.t_address_name+"</td><td>"+
+                                            data[i].t_address.t_buyer_address+"</td>"+"<td>"+
+                                            data[i].t_address.t_address_phone+"</td>"+"<td><button class='btn btn-xs add-del btn-info' onclick='delteaddress("+data[i].t_address.t_address_id+")'>删除</button></td></tr>";
+                                    }
+                                    console.log(contentDic)
+                                    $('#shouhuoContent22').html(contentDic);
+                                },
+                                error:function (data) {
+                                    alert("ajax--渲染失败")
+
+                                }
+                            })
+
+
+
+                        }else{
+                            alert("添加失败，检查9001-addnewaddress")
+                        }
+                    }
+                    ,error:function (data) {
+                        alert("ajax----addressnew")
+                    }
+
+                })
+        })
+
+
+
+        /*
+        全选-购物车
+         */
+        $('#checkall').click(function () {
+            var flag=$(this).prop("checked");
+            if(flag){
+                $('.ckitem').prop("checked",true);
+            }else{
+                $('.ckitem').prop("checked",false);
+            }
+        })
+
+        /*
+        单选
+         */
+        $(".ckitem").click(function () {
+            // var cl=$('.ckitem').length;
+            var totalPrice=0;
+            var length=$('.ckitem:checked').length;
+            $('#selectCount').text(length)
+
+            // var t=$('#cartBody tr');
+
+            for(var i=0;i<length;i++){
+                var tr = $($(".cart-body tr")[i]);
+                var check=  tr.children(":eq(0)").children(".ckitem").prop("checked");
+                var countPrice= tr.children(":eq(5)").children("span").html();
+                console.log("countPrice==>"+countPrice);
+                countPrice=Number(countPrice)
+                // totalPrice+=countPrice;
+                if(check){
+                    totalPrice+=countPrice;
+                }
+            }
+            $('#selectTotal').text(totalPrice);
+
+        })
+
+
+        /*
+        订单界面的控制
+         */
+
+
+        // function showPopCancel(orderid) {
+        //     console.log("showpop");
+        //     $('#'+orderid+'tdpopoverCancel').popover({
+        //         content: $('#'+orderid+'popoverBodyCancel').html()
+        //     });
+        //     $('#'+orderid+'tdpopoverCancel').popover('show');
+        //
+        //
+        //
+        // }
+        //
+        // function hidePopCancel(orderid) { console.log("hidePop");
+        //     $('#'+orderid+'tdpopoverCancel').popover('hide');
+        // }
+
+
+/*已经放在head中
+        showPop=  function (orderid) {
+            $('#'+orderid+'tdpopover').popover({
+                content: $('#'+orderid+'popoverBody').html()
+            });
+            $('#'+orderid+'tdpopover').popover('show');
+        }
+
+        hidePop=  function (orderid) {
+            $('#'+orderid+'tdpopover').popover('hide');
+        }
+*/
+        // 购物车功能
+        function tt(index) {
+            alert(index)
+            $('#' + index + 'quantity').addClass("hidden");
+            $('#' + index + 'shuliang').removeClass("hidden");
+            $('#' + index + 'updateover').removeClass("hidden");
+            $('#' + index + 'shifujia').addClass("hidden")
+
+        }
+
+        function cancelOrder(index) {
+            console.log(index)
+            var isConfirm = confirm("确定删除该订单?");
+            if (isConfirm == true) {
+                $.ajax({
+                    url: "/buyer/personal/deleteOrderByOrderId?id=" + index,
+                    type: "get",
+                    jsontype: "json",
+                    success: function (data) {
+                        window.location.reload()
+                    },
+                    error: function (data) {
+                        alert("gg")
+                    }
+                })
+            }
+        }
+
+
+
+    </script>
+    <!--<script>-->
+    <!--var cookie=document.cookie;-->
+    <!--console.log(cookie);-->
+    <!--var cookieArray=cookie.split(";");-->
+    <!--var userPhone=cookieArray[0].split("=")[1];-->
+    <!--alert("userPhone=="+userPhone);-->
+    <!--if(userPhone!=null&&userPhone!=""&&userPhone!=undefined) {-->
+    <!--alert("entery===>userphone!=null")-->
+    <!--$("#loginSpan").removeAttr("href");-->
+    <!--$("#loginSpan").removeAttr("data-toggle");-->
+    <!--$("#myModal").modal('hide');-->
+
+    <!--$("#loginSpan").html(userPhone + " 欢迎你!");-->
+
+    <!--$("#loginSpan").addClass("dropdown-toggle");-->
+    <!--$("#loginSpan").attr("data-toggle","dropdown");-->
+    <!--$("#loginSpan").attr("data-target","#encompassLoginSpan")-->
+    <!--$("#encompassLoginSpan").addClass("dropdown");-->
+    <!--}else{alert("kkk");-->
+    <!--window.location.href="http://localhost:8001/";-->
+    <!--}-->
+    <!--</script>-->
+</body>
+</html>

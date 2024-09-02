@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.jiushutao.dao.ProductDao">
+    <select id="allBooks" resultType="T_Book">
+        select * from t_book
+    </select>
+
+    <select id="getBook" resultType="t_book" parameterType="String">
+        select * from t_book where t_book_id=#{bookId}
+    </select>
+
+
+    <select id="getSearchBooksByLikeName" resultType="T_Book" parameterType="String">
+        select * from t_book where t_book_name like concat('%', #{likename}, '%')
+    </select>
+
+
+    <!--/*-->
+    <!--获取主栏位书籍-->
+    <!--*/-->
+    <select id="getMainbooks" resultType="T_Book">
+        select * from t_book where t_book_priority=2 and now()&lt;=t_priority_end
+    </select>
+
+    <!--/*-->
+    <!--获取好书推荐栏位-->
+    <!--*/-->
+    <select id="getrecommendbooks" resultType="T_Book">
+        select * from t_book where t_book_priority=1 and now()&lt;=t_priority_end
+    </select>
+
+
+
+    <!--/*-->
+    <!--获取金牌书屋-->
+    <!--*/-->
+    <select id="getGoldShops" resultType="T_Shop">
+        select * from t_shop where t_shop_priority=1 and now()&lt;=t_priority_end
+    </select>
+
+
+    <!--/*-->
+    <!--通过shopid返回shop实体-->
+    <!--*/-->
+    <select id="getShopByShopid" resultType="T_shop">
+        select * from t_shop where t_shop_id=#{shopid}
+    </select>
+
+
+    <!--/*-->
+    <!--按书籍分类-->
+    <!--*/-->
+    <select id="getCategoryBooks" resultType="T_Book" parameterType="java.lang.Character">
+        select * from t_book where t_book_category=#{category}
+    </select>
+
+
+    <!--/*-->
+    <!--通过shopid返回该商店所有书籍-->
+    <!--*/-->
+
+    <select id="getAllBooks" resultType="T_Book" parameterType="String">
+        select * from t_book where t_shop_id=#{shopid}
+    </select>
+
+    <!--/*-->
+    <!--更多好书栏位-->
+    <!--*/-->
+    <select id="getmoreBooks" resultType="T_Book" >
+        select * from t_book where t_book_priority=0;
+    </select>
+
+</mapper>

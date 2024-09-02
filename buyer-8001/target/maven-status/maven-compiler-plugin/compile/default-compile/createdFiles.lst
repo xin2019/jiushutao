@@ -1,0 +1,16 @@
+com\xin\jiushutao\controller\ProductController.class
+com\xin\jiushutao\controller\RegisterController.class
+com\xin\jiushutao\Buyer_8001.class
+com\xin\jiushutao\controller\LoginController.class
+com\xin\jiushutao\service\GithubProvider.class
+com\xin\jiushutao\utils\FormalUtils.class
+com\xin\jiushutao\controller\CartController.class
+com\xin\jiushutao\controller\showAdminpages.class
+com\xin\jiushutao\config\LoginHandlerInceptor.class
+com\xin\jiushutao\controller\BookDetail.class
+com\xin\jiushutao\controller\showSellerpages.class
+com\xin\jiushutao\config\BuyerMvcConfig.class
+com\xin\jiushutao\controller\showArchitect.class
+com\xin\jiushutao\service\GithubProviderImpl.class
+com\xin\jiushutao\controller\OrderController.class
+com\xin\jiushutao\controller\PersonalController.class
