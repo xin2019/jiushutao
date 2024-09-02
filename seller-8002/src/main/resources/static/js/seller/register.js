@@ -5,4 +5,4 @@ $(document).ready(function(){
     function testa() {
         alert("testa")
     }
-}
+})
